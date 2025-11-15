@@ -27,11 +27,7 @@ export interface Usuario {
   data_expiracao_codigo?: Date;
 }
 
-// --- Opcional: Tipo para Criar um Novo Usuário ---
-// (Frequentemente útil para formulários ou payloads de API)
 
-// Use "Pick" ou "Omit" para basear-se na interface principal.
-// Aqui, estou "Omit" (omitindo) os campos que o banco de dados gera.
 export type CriarUsuarioDto = Omit<
   Usuario,
   | "_id"
@@ -42,7 +38,6 @@ export type CriarUsuarioDto = Omit<
   | "senha_definida" // Opcional, pois tem 'default'
   | "online" // Opcional, pois tem 'default'
 > & {
-  // Reescrevemos os campos com 'default' como opcionais
   perfil?: PerfilUsuario;
   ativo?: boolean;
   senha_definida?: boolean;
