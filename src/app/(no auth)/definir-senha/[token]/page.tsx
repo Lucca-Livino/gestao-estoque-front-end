@@ -92,7 +92,7 @@ export default function DefinirSenhaPage() {
   // Loading state
   if (validatingToken) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
           <Loader2 className="w-12 h-12 text-[#0042D9] animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Validando seu convite...</p>
@@ -104,7 +104,7 @@ export default function DefinirSenhaPage() {
   // Invalid token
   if (!tokenValid) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
@@ -132,7 +132,7 @@ export default function DefinirSenhaPage() {
   // Success state
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
@@ -154,7 +154,7 @@ export default function DefinirSenhaPage() {
 
   // Form
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}

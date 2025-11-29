@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import UserMenu from "@/components/layout/header/user-menu";
 import Footer from "@/components/layout/footer";
@@ -11,11 +11,15 @@ export default function Home() {
 
   return (
     <div>
-      <main className="min-h-screen bg-gradient-to-br from-[#0042D9] via-[#0042D9]/90 to-[#0042D9]/70 p-6 flex flex-col">
+      <main className="min-h-screen bg-linear-to-br from-[#0042D9] via-[#0042D9]/90 to-[#0042D9]/70 p-6 flex flex-col">
         <div className="max-w-7xl mx-auto w-full flex flex-col flex-1">
-
           <div className="flex items-center justify-between mb-6 cursor-pointer">
-            <h1 className="text-xl font-bold text-white" onClick={() => window.location.href = "/home"}>Gestão de Estoque</h1>
+            <h1
+              className="text-xl font-bold text-white"
+              onClick={() => (window.location.href = "/home")}
+            >
+              Gestão de Estoque
+            </h1>
             <UserMenu />
           </div>
 
@@ -36,7 +40,5 @@ export default function Home() {
       </main>
       <Footer />
     </div>
-
-
-  )
+  );
 }
