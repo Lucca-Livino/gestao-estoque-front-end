@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { UserPlus, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { PasswordInput } from '@/components/ui/PasswordInput';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { UserPlus, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import Link from "next/link";
 
 export default function DefinirSenhaPage() {
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [validatingToken, setValidatingToken] = useState(true);
   const [tokenValid, setTokenValid] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
   const params = useParams();
   const token = params.token as string;
@@ -22,7 +22,7 @@ export default function DefinirSenhaPage() {
   useEffect(() => {
     const validateToken = async () => {
       if (!token) {
-        setError('Link inválido ou expirado');
+        setError("Link inválido ou expirado");
         setValidatingToken(false);
         setTokenValid(false);
         return;
@@ -31,7 +31,7 @@ export default function DefinirSenhaPage() {
       try {
         setTokenValid(true);
       } catch (err) {
-        setError('Link inválido ou expirado');
+        setError("Link inválido ou expirado");
         setTokenValid(false);
       } finally {
         setValidatingToken(false);
@@ -43,42 +43,47 @@ export default function DefinirSenhaPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     // Validações
     if (senha !== confirmarSenha) {
-      setError('As senhas não coincidem');
+      setError("As senhas não coincidem");
       return;
     }
 
     if (senha.length < 6) {
-      setError('A senha deve ter no mínimo 6 caracteres');
+      setError("A senha deve ter no mínimo 6 caracteres");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/redefinir-senha/token?token=${token}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ senha }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/redefinir-senha/token?token=${token}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ senha }),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccess(true);
         setTimeout(() => {
-          router.push('/login');
+          router.push("/login");
         }, 3000);
       } else {
-        setError(data.message || 'Erro ao definir senha. O link pode ter expirado.');
+        setError(
+          data.message || "Erro ao definir senha. O link pode ter expirado."
+        );
       }
     } catch (err) {
-      setError('Erro de conexão. Tente novamente mais tarde.');
+      setError("Erro de conexão. Tente novamente mais tarde.");
     } finally {
       setLoading(false);
     }
@@ -109,7 +114,8 @@ export default function DefinirSenhaPage() {
               Link Inválido ou Expirado
             </h1>
             <p className="text-gray-600 mb-6">
-              {error || 'Este link para definir senha não é válido ou já expirou.'}
+              {error ||
+                "Este link para definir senha não é válido ou já expirou."}
             </p>
             <Link
               href="/login"
@@ -135,8 +141,8 @@ export default function DefinirSenhaPage() {
             Conta Ativada! 🎉
           </h1>
           <p className="text-gray-600 mb-6">
-            Sua senha foi definida com sucesso e sua conta está ativa. 
-            Você já pode fazer login no sistema!
+            Sua senha foi definida com sucesso e sua conta está ativa. Você já
+            pode fazer login no sistema!
           </p>
           <div className="animate-pulse text-[#0042D9] font-medium">
             Redirecionando para o login em 3 segundos...
@@ -167,7 +173,7 @@ export default function DefinirSenhaPage() {
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
@@ -175,8 +181,9 @@ export default function DefinirSenhaPage() {
           {/* Info Banner */}
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
-              <strong>Primeiro acesso:</strong> Crie uma senha segura para proteger sua conta.
-              Após definir sua senha, você poderá fazer login no sistema.
+              <strong>Primeiro acesso:</strong> Crie uma senha segura para
+              proteger sua conta. Após definir sua senha, você poderá fazer
+              login no sistema.
             </p>
           </div>
 
@@ -205,19 +212,32 @@ export default function DefinirSenhaPage() {
 
             {/* Password Requirements */}
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <p className="text-sm font-medium text-gray-900 mb-2">Sua senha deve ter:</p>
+              <p className="text-sm font-medium text-gray-900 mb-2">
+                Sua senha deve ter:
+              </p>
               <ul className="text-sm text-gray-700 space-y-1">
                 <li className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${senha.length >= 6 ? 'bg-green-500' : 'bg-gray-300'}`} />
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      senha.length >= 6 ? "bg-green-500" : "bg-gray-300"
+                    }`}
+                  />
                   No mínimo 6 caracteres
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${senha === confirmarSenha && senha.length > 0 ? 'bg-green-500' : 'bg-gray-300'}`} />
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      senha === confirmarSenha && senha.length > 0
+                        ? "bg-green-500"
+                        : "bg-gray-300"
+                    }`}
+                  />
                   As senhas devem coincidir
                 </li>
               </ul>
               <p className="text-xs text-gray-500 mt-2">
-                💡 Dica: Use uma combinação de letras, números e caracteres especiais para maior segurança
+                💡 Dica: Use uma combinação de letras, números e caracteres
+                especiais para maior segurança
               </p>
             </div>
 
@@ -226,15 +246,15 @@ export default function DefinirSenhaPage() {
               disabled={loading}
               className="w-full bg-[#0042D9] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#0042D9]/90 focus:ring-2 focus:ring-[#0042D9] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
-              {loading ? 'Ativando conta...' : 'Ativar Conta e Definir Senha'}
+              {loading ? "Ativando conta..." : "Ativar Conta e Definir Senha"}
             </button>
           </form>
 
           {/* Help Text */}
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>
-              Já tem uma senha?{' '}
-              <Link 
+              Já tem uma senha?{" "}
+              <Link
                 href="/login"
                 className="text-[#0042D9] hover:underline font-medium"
               >

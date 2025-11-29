@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
@@ -15,14 +15,11 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { data: session, status } = useSession();
-
-  // Verifica se deve redirecionar baseado em manter logado
+  
   useEffect(() => {
-    if (status === "authenticated") {
-      // Se tem erro de refresh, limpa tudo e força logout
+    if (status === "authenticated") {      
       if ((session as any)?.error === "RefreshAccessTokenError") {
-        localStorage.removeItem("manterLogado");
-        // Força signOut para limpar sessão inválida
+        localStorage.removeItem("manterLogado");        
         import("next-auth/react").then(({ signOut }) => {
           signOut({ redirect: false });
         });
@@ -31,11 +28,9 @@ export default function Login() {
 
       const manterLogadoStorage = localStorage.getItem("manterLogado");
       
-      // Se manterLogado está ativo, redireciona para home
       if (manterLogadoStorage === "true") {
         router.push("/home");
-      } else {
-        // Se não está ativo, faz logout silencioso para permitir novo login
+      } else {        
         localStorage.removeItem("manterLogado");
       }
     }
@@ -46,8 +41,7 @@ export default function Login() {
     setIsLoading(true);
     setError("");
 
-    try {
-      // Salva a preferência de manter logado no localStorage
+    try {      
       localStorage.setItem("manterLogado", manterLogado.toString());
 
       const result = await signIn("credentials", {
@@ -68,68 +62,68 @@ export default function Login() {
       setIsLoading(false);
     }
   };
-
-  // Mostra loading enquanto verifica a sessão
+  
   if (status === "loading") {
     return (
       <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white">
-          <LoaderIcon role="status" className="animate-spin mt-20 mx-auto" />
+        <LoaderIcon role="status" className="animate-spin mt-20 mx-auto" />
       </div>
     );
   }
-
-  // Não renderiza o formulário se já estiver autenticado E manterLogado estiver ativo
-  if (status === "authenticated") {
-    // Se tem erro de refresh token, mostra o formulário
-    if ((session as any)?.error === "RefreshAccessTokenError") {
-      // Permite mostrar o formulário para novo login
+  
+  if (status === "authenticated") {    
+    if ((session as any)?.error === "RefreshAccessTokenError") {      
     } else {
-      const manterLogadoStorage = typeof window !== "undefined" ? localStorage.getItem("manterLogado") : null;
+      const manterLogadoStorage =
+        typeof window !== "undefined"
+          ? localStorage.getItem("manterLogado")
+          : null;
       if (manterLogadoStorage === "true") {
-        return null; 
+        return null;
       }
-    }
-    // Se não está com manterLogado, mostra o formulário normalmente
+    }    
   }
 
   return (
     <div>
       <main className="min-h-screen bg-white p-6 flex flex-col relative overflow-hidden">
-
         <div className="flex items-center space-x-3">
-                <h1 className="text-xl font-bold">Gestão de Estoque</h1>
+          <h1 className="text-xl font-bold">Gestão de Estoque</h1>
         </div>
 
-        <div 
+        <div
           className="absolute w-[2500px] h-[2500px] pointer-events-none"
           style={{
-            right: '-400.05px',
-            top: '-251.77px',
-            transform: 'rotate(15deg)',
-            transformOrigin: 'center'
+            right: "-400.05px",
+            top: "-251.77px",
+            transform: "rotate(15deg)",
+            transformOrigin: "center",
           }}
         >
-          <div className="w-full h-full bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] rounded-tl-full"></div>
+          <div className="w-full h-full bg-linear-to-br from-[#2563eb] to-[#1d4ed8] rounded-tl-full"></div>
         </div>
 
         <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 relative z-10">
-          
-
           <div className="flex-1 flex flex-col justify-center">
             <div className="max-w-md mx-auto w-full">
               <div className="bg-white rounded-2xl shadow-2xl p-8 backdrop-blur-sm border border-white/20">
-                <h1 className="text-2xl font-bold text-gray-800 text-center mb-8">Login</h1>
-                
+                <h1 className="text-2xl font-bold text-gray-800 text-center mb-8">
+                  Login
+                </h1>
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="matricula" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="matricula"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Matrícula*
                     </label>
                     <input
                       type="text"
                       id="matricula"
                       value={matricula}
-                      onChange={(e) => setMatricula(e.target.value)}
+                      onChange={(e) => setMatricula(e.target.value.toUpperCase())}
                       className="w-full px-4 py-3 border-0 bg-gray-100 rounded-lg focus:ring-2 focus:ring-[#0042D9] focus:bg-white outline-none transition-all"
                       placeholder="Digite sua matrícula"
                       required
@@ -138,7 +132,10 @@ export default function Login() {
                   </div>
 
                   <div>
-                    <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="senha"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Senha*
                     </label>
                     <input
@@ -162,7 +159,10 @@ export default function Login() {
                       className="h-4 w-4 text-[#0042D9] focus:ring-[#0042D9] border-gray-300 rounded"
                       disabled={isLoading}
                     />
-                    <label htmlFor="manterLogado" className="ml-2 block text-sm text-gray-700">
+                    <label
+                      htmlFor="manterLogado"
+                      className="ml-2 block text-sm text-gray-700"
+                    >
                       Manter logado
                     </label>
                   </div>
@@ -183,8 +183,10 @@ export default function Login() {
                 </form>
 
                 <div className="mt-6 text-center">
-                  <span className="text-sm text-gray-600">Esqueceu a senha? </span>
-                  <Link 
+                  <span className="text-sm text-gray-600">
+                    Esqueceu a senha?{" "}
+                  </span>
+                  <Link
                     href="/recuperar-senha"
                     className="text-sm text-[#0042D9] hover:underline font-medium"
                   >
