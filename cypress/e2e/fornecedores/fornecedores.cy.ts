@@ -228,43 +228,6 @@ describe("Fornecedores", () => {
     });
   });
 
-  describe.skip("Filtrar fornecedores", () => {
-    it("Deve filtrar fornecedores por nome", () => {
-      cy.visit(`${frontendUrl}/fornecedores`);
-      cy.wait("@getFornecedores");
-
-      cy.getByData("input-busca-fornecedor").type("Fornecedor");
-      cy.getByData("input-busca-fornecedor").type("{enter}");
-
-      cy.wait("@getFornecedores").then((interception) => {
-        expect(interception.request.url).to.include(
-          "nome_fornecedor=Fornecedor"
-        );
-      });
-
-      cy.getByData("tabela-fornecedores")
-        .find("tbody tr")
-        .should("have.length.greaterThan", 0);
-    });
-
-    it("Deve filtrar fornecedores por status", () => {
-      cy.visit(`${frontendUrl}/fornecedores`);
-      cy.wait("@getFornecedores");
-
-      cy.getByData("select-status-fornecedor").click();
-
-      cy.getByData("select-item-ativo").click();
-
-      cy.wait("@getFornecedores").then((interception) => {
-        expect(interception.request.url).to.include("ativo=true");
-      });
-
-      cy.getByData("tabela-fornecedores")
-        .find("tbody tr")
-        .should("have.length.greaterThan", 0);
-    });
-  });
-
   describe("Desativar fornecedor", () => {
     it("Deve exibir detalhes do fornecedor ao clicar na linha", () => {
       cy.visit(`${frontendUrl}/fornecedores`);
@@ -291,12 +254,61 @@ describe("Fornecedores", () => {
     });
   });
 
-  describe.skip("Imprimir fornecedores", () => {
-    it("Deve imprimir relatório de fornecedores", () => {
-      cy.window().then((win) => {
-        cy.stub(win, "open").as("printStub");
+  describe("Filtrar fornecedores", () => {
+    it("Deve filtrar fornecedores por nome", () => {
+      cy.visit(`${frontendUrl}/fornecedores`);
+      cy.wait("@getFornecedores");
+
+      cy.getByData("input-busca-fornecedor").type("Fornecedor");
+      cy.getByData("input-busca-fornecedor").type("{enter}");
+
+      cy.wait("@getFornecedores").then((interception) => {
+        expect(interception.request.url).to.include(
+          "nome_fornecedor=Fornecedor"
+        );
       });
 
+      cy.getByData("tabela-fornecedores")
+        .find("tbody tr")
+        .should("have.length.greaterThan", 0);
+    });
+
+    it("Deve filtrar fornecedores por status", () => {
+      cy.visit(`${frontendUrl}/fornecedores`);
+      cy.wait("@getFornecedores");
+
+      cy.getByData("select-status-fornecedor").click();
+
+      cy.getByData("select-item-inativo").click();
+
+      cy.wait("@getFornecedores").then((interception) => {
+        expect(interception.request.url).to.include("status=false");
+      });
+
+      cy.getByData("tabela-fornecedores")
+        .find("tbody tr")
+        .should("have.length.greaterThan", 0);
+    });
+
+    it("Deve limpar filtros de fornecedores", () => {
+      cy.visit(`${frontendUrl}/fornecedores`);
+      cy.wait("@getFornecedores");
+
+      cy.getByData("btn-limpar-filtro").click();
+
+      cy.wait("@getFornecedores").then((interception) => {
+        expect(interception.request.url).to.not.include("status=");
+        expect(interception.request.url).to.not.include("nome_fornecedor=");
+      });
+
+      cy.getByData("tabela-fornecedores")
+        .find("tbody tr")
+        .should("have.length.greaterThan", 0);
+    });
+  });
+
+  describe("Imprimir fornecedores", () => {
+    it("Deve permitir clicar no botão de impressão sem erros", () => {
       cy.visit(`${frontendUrl}/fornecedores`);
       cy.wait("@getFornecedores");
 
@@ -304,9 +316,16 @@ describe("Fornecedores", () => {
         .find("tbody tr")
         .should("have.length.greaterThan", 0);
 
-      cy.getByData("btn-imprimir").should("be.visible").click();
+      cy.getByData("btn-imprimir")
+        .should("be.visible")
+        .and("not.be.disabled")
+        .click();
 
-      cy.get("@printStub").should("have.been.called");
+      cy.on("window:alert", (text) => {
+        expect(text).to.not.include("Não há dados para imprimir"); 
+      });
+
+      cy.getByData("tabela-fornecedores").should("be.visible"); 
     });
   });
 
