@@ -146,7 +146,11 @@ export function MovimentacaoListagem({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="gap-4 max-w-2xl">
+      <DialogContent
+        showCloseButton={false}
+        className="gap-4 max-w-2xl"
+        data-test="dialog-listagem-movimentacao"
+      >
         <DialogHeader className="flex flex-col gap-4 py-2 border-b">
           <DialogTitle>
             {movimentacao ? (
@@ -358,6 +362,7 @@ export function MovimentacaoListagem({
             <Button
               className="w-1/2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1"
               onClick={handlePrintMovimentacao}
+              data-test="btn-imprimir"
             >
               <Printer className="w-4 h-4" /> Imprimir
             </Button>
