@@ -62,16 +62,15 @@ export function FornecedoresFilter({
           setAtivo(novo);
           onStatusChange?.(novo);
         }}
-        data-test="select-status-fornecedor"
       >
-        <SelectTrigger className="w-[120px]">
+        <SelectTrigger className="w-[120px]" data-test="select-status-fornecedor">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="todos">Todos</SelectItem>
-            <SelectItem value="true">Ativo</SelectItem>
-            <SelectItem value="false">Inativo</SelectItem>
+            <SelectItem value="todos" data-test="select-item-todos">Todos</SelectItem>
+            <SelectItem value="true" data-test="select-item-ativo">Ativo</SelectItem>
+            <SelectItem value="false" data-test="select-item-inativo">Inativo</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
