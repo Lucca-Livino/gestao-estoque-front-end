@@ -50,10 +50,12 @@ function CalendarPicker({
   placeholder,
   selectedDate,
   onDateChange,
+  "data-test": dataTest,
 }: {
   placeholder: string;
   selectedDate: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
+  "data-test"?: string;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -65,6 +67,7 @@ function CalendarPicker({
           className={`w-[180px] justify-between font-normal cursor-pointer ${
             !selectedDate ? "text-muted-foreground" : ""
           }`}
+          data-test={dataTest}
         >
           {selectedDate
             ? selectedDate.toLocaleDateString("pt-BR")
@@ -120,6 +123,7 @@ export function MovimentacoesFilter({
               onSubmit();
             }
           }}
+          data-test="input-busca-movimentacao"
         />
         <InputGroupAddon>
           <SearchIcon className="cursor-pointer" />
@@ -132,15 +136,22 @@ export function MovimentacoesFilter({
           const novo = v === "todos" ? "" : v;
           setTipoProduto(novo);
         }}
+        data-test="select-tipo-movimentacao"
       >
         <SelectTrigger className="w-[120px] cursor-pointer">
           <SelectValue placeholder="Tipo" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="todos">Todos</SelectItem>
-            <SelectItem value="entrada">Entrada</SelectItem>
-            <SelectItem value="saida">Saída</SelectItem>
+            <SelectItem value="todos" data-test="select-item-todos">
+              Todos
+            </SelectItem>
+            <SelectItem value="entrada" data-test="select-item-entrada">
+              Entrada
+            </SelectItem>
+            <SelectItem value="saida" data-test="select-item-saida">
+              Saída
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
@@ -171,6 +182,7 @@ export function MovimentacoesFilter({
               setDataInicial("");
             }
           }}
+          data-test="calendar-data-inicial"
         />
       </div>
 
@@ -207,6 +219,7 @@ export function MovimentacoesFilter({
               setDataFinal("");
             }
           }}
+          data-test="calendar-data-final"
         />
       </div>
 
@@ -236,6 +249,7 @@ export function MovimentacoesFilter({
           }}
           variant="outline"
           className="cursor-pointer"
+          data-test="btn-limpar-filtros-movimentacao"
         >
           Limpar
         </Button>

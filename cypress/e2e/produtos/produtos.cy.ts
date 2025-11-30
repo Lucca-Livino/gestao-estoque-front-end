@@ -17,7 +17,7 @@ describe("Produtos", () => {
     cy.login(matricula, senha);
   });
 
-  describe.skip("Cadastrar produto", () => {
+  describe("Cadastrar produto", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/produtos`);
       cy.wait("@getProdutos");
@@ -161,7 +161,7 @@ describe("Produtos", () => {
       cy.contains("Produto cadastrado com sucesso!").should("be.visible");
     });
 
-    it.skip("Deve dar erro ao criar produto com código duplicado", () => {
+    it("Deve dar erro ao criar produto com código duplicado", () => {
       const nome = `Produto Teste ${Date.now()}`;
 
       cy.getByData("input-nome-produto").type(nome);
@@ -187,7 +187,7 @@ describe("Produtos", () => {
     });
   });
 
-  describe.skip("Editar produto", () => {
+  describe("Editar produto", () => {
     let primeiroProduto: any;
 
     beforeEach(() => {
@@ -244,7 +244,7 @@ describe("Produtos", () => {
     });
   });
 
-  describe.skip("Filtrar produtos", () => {
+  describe("Filtrar produtos", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/produtos`);
       cy.wait("@getProdutos");
@@ -321,7 +321,7 @@ describe("Produtos", () => {
       cy.wait("@getProdutos");
     });
 
-    it.skip("Deve navegar para a próxima página", () => {
+    it("Deve navegar para a próxima página", () => {
       cy.get("body").then(($body) => {
         if ($body.find('[data-test="btn-proxima-pagina"]').length > 0) {
           cy.getByData("btn-proxima-pagina").should(
@@ -341,7 +341,7 @@ describe("Produtos", () => {
       });
     });
 
-    it.skip("Deve navegar para a página anterior", () => {
+    it("Deve navegar para a página anterior", () => {
       cy.get("body").then(($body) => {
         if (
           $body.find('[data-test="btn-proxima-pagina"]').length > 0 &&
@@ -377,7 +377,7 @@ describe("Produtos", () => {
     });
   });
 
-  describe.skip("Imprimir produtos", () => {
+  describe("Imprimir produtos", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/produtos`);
       cy.wait("@getProdutos");
