@@ -326,7 +326,9 @@ export function CadastroMovimentacao({
   const save = () => {
     if (!tipo || !destino || produtos.length === 0) {
       toast.error(
-        <div data-test="toast-error">Preencha todos os campos obrigatórios</div>
+        <div data-test="toast-error-campos-obrigatorios">
+          Preencha todos os campos obrigatórios
+        </div>
       );
       return;
     }
@@ -335,14 +337,21 @@ export function CadastroMovimentacao({
       (produto) => !produto.codigo.trim()
     );
     if (produtosSemCodigo.length > 0) {
-      toast.error("Preencha o código de todos os produtos");
+      toast.error(
+        <div data-test="toast-error-codigo-produto">
+          Preencha o código de todos os produtos
+        </div>
+      );
       return;
     }
 
     const produtosSemID = produtos.filter((produto) => !produto.id.trim());
     if (produtosSemID.length > 0) {
       toast.error(
-        "Alguns produtos não foram encontrados. Aguarde a busca ou verifique os códigos."
+        <div data-test="toast-error-produto-nao-encontrado">
+          Alguns produtos não foram encontrados. Aguarde a busca ou verifique os
+          códigos.
+        </div>
       );
       return;
     }
@@ -351,7 +360,11 @@ export function CadastroMovimentacao({
       (produto) => !produto.quantidade || !produto.valor
     );
     if (produtosSemDados.length > 0) {
-      toast.error("Preencha quantidade e valor de todos os produtos");
+      toast.error(
+        <div data-test="toast-error-quantidade-valor">
+          Preencha quantidade e valor de todos os produtos
+        </div>
+      );
       return;
     }
 

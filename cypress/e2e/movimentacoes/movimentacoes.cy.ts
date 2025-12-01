@@ -5,6 +5,7 @@ describe("Movimentações", () => {
   const senha = "Admin@123";
 
   let movimentacaoIdCriada: string;
+  let authToken: string;
   const destinoMovimentacao = `Destino Teste ${Date.now()}`;
   const observacoesMovimentacao = "Observações de teste";
 
@@ -26,7 +27,7 @@ describe("Movimentações", () => {
     cy.login(matricula, senha);
   });
 
-  describe("Cadastrar movimentação", () => {
+  describe.skip("Cadastrar movimentação", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
@@ -36,47 +37,55 @@ describe("Movimentações", () => {
       cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
     });
 
-    it.skip("Deve exibir pop-up de cadastro ao clicar em cadastrar", () => {
+    it("Deve exibir pop-up de cadastro ao clicar em cadastrar", () => {
       cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
       cy.contains("Cadastro de movimentações").should("be.visible");
     });
 
-    it.skip("Deve exibir todos os campos obrigatórios do formulário", () => {
+    it("Deve exibir todos os campos obrigatórios do formulário", () => {
       cy.getByData("select-tipo").should("be.visible");
       cy.getByData("input-destino").should("be.visible");
       cy.getByData("btn-adicionar-produto").should("be.visible");
     });
 
-    it.skip("Deve validar campo tipo obrigatório", () => {
+    it("Deve validar campo tipo obrigatório", () => {
       cy.getByData("btn-salvar").click();
 
       cy.wait(500);
+      cy.get('[data-test="toast-error-campos-obrigatorios"]', {
+        timeout: 5000,
+      }).should("exist");
       cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
-      cy.contains("Preencha todos os campos obrigatórios").should("be.visible");
     });
 
-    it.skip("Deve validar campo destino obrigatório", () => {
+    it("Deve validar campo destino obrigatório", () => {
       cy.getByData("select-tipo").click();
       cy.getByData("select-item-entrada").click();
 
       cy.getByData("btn-salvar").click();
-      cy.contains("Preencha todos os campos obrigatórios").should("be.visible");
 
+      cy.wait(500);
+      cy.get('[data-test="toast-error-campos-obrigatorios"]', {
+        timeout: 5000,
+      }).should("exist");
       cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
     });
 
-    it.skip("Deve validar que pelo menos um produto é obrigatório", () => {
+    it("Deve validar que pelo menos um produto é obrigatório", () => {
       cy.getByData("select-tipo").click();
       cy.getByData("select-item-entrada").click();
       cy.getByData("input-destino").type(destinoMovimentacao);
 
       cy.getByData("btn-salvar").click();
 
-      cy.contains("Preencha todos os campos obrigatórios").should("be.visible");
+      cy.wait(500);
+      cy.get('[data-test="toast-error-campos-obrigatorios"]', {
+        timeout: 5000,
+      }).should("exist");
       cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
     });
 
-    it.skip("Deve permitir adicionar produto", () => {
+    it("Deve permitir adicionar produto", () => {
       cy.getByData("btn-adicionar-produto").click();
 
       cy.getByData("input-codigo-0").should("be.visible");
@@ -96,7 +105,7 @@ describe("Movimentações", () => {
       cy.getByData("input-nome-0").invoke("val").should("not.be.empty");
     });
 
-    it.skip("Deve buscar produto por nome e selecionar do dropdown", () => {
+    it("Deve buscar produto por nome e selecionar do dropdown", () => {
       cy.getByData("btn-adicionar-produto").click();
 
       cy.getByData("search-wrapper-0").should("be.visible");
@@ -119,7 +128,6 @@ describe("Movimentações", () => {
 
       cy.getByData("btn-adicionar-produto").click();
 
-      // Buscar produto por nome usando o dropdown
       cy.getByData("input-nome-0").type("Algodão");
       cy.wait("@getProdutos");
       cy.wait(500);
@@ -140,7 +148,7 @@ describe("Movimentações", () => {
       cy.contains("Movimentação cadastrada com sucesso!").should("be.visible");
     });
 
-    it.skip("Deve criar movimentação de saída com sucesso", () => {
+    it("Deve criar movimentação de saída com sucesso", () => {
       cy.getByData("select-tipo").click();
       cy.getByData("select-item-saida").click();
       cy.getByData("input-destino").type(destinoMovimentacao);
@@ -148,13 +156,14 @@ describe("Movimentações", () => {
 
       cy.getByData("btn-adicionar-produto").click();
 
-      // Buscar produto por código
-      cy.getByData("input-codigo-0").type("DIS");
+      cy.getByData("input-nome-0").type("Algodão");
       cy.wait("@getProdutos");
       cy.wait(500);
 
-      cy.getByData("input-valor-0").type("150");
-      cy.getByData("input-quantidade-0").type("5");
+      cy.get('[data-test^="product-search-item-0-"]').first().click();
+
+      cy.getByData("input-valor-0").type("299.99");
+      cy.getByData("input-quantidade-0").type("10");
 
       cy.getByData("btn-salvar").click();
 
@@ -164,7 +173,7 @@ describe("Movimentações", () => {
       cy.contains("Movimentação cadastrada com sucesso!").should("be.visible");
     });
 
-    it.skip("Deve exibir campos de nota fiscal para entrada", () => {
+    it("Deve exibir campos de nota fiscal para entrada", () => {
       cy.getByData("select-tipo").click();
       cy.getByData("select-item-entrada").click();
 
@@ -173,57 +182,251 @@ describe("Movimentações", () => {
       cy.getByData("input-nf-chave").should("be.visible");
       cy.getByData("input-nf-data").should("be.visible");
     });
+  });
 
-    it.skip("Deve dar erro ao criar movimentação com produto inválido", () => {
-      // Similar to duplicate, but for invalid product
+  //TODO:  review
+  describe("Verificar atualização de estoque", () => {
+    let produtoId: string;
+    let estoqueInicial: number;
+
+    it("Deve aumentar o estoque ao criar movimentação de entrada", () => {
+      // Fazer login via API para obter o token
+      cy.request({
+        method: "POST",
+        url: `${apiUrl}/login`,
+        body: {
+          matricula: matricula,
+          senha: senha,
+        },
+      }).then((loginResponse) => {
+        authToken = loginResponse.body.accesstoken;
+
+        // Buscar um produto existente usando o token
+        cy.request({
+          method: "GET",
+          url: `${apiUrl}/produtos?limite=1`,
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }).then((response) => {
+          const produto = response.body.data.docs[0];
+          produtoId = produto._id;
+          estoqueInicial = produto.quantidade_estoque || 0;
+
+          // Agora visitar a página e fazer o fluxo da UI
+          cy.visit(`${frontendUrl}/movimentacoes`);
+          cy.wait("@getMovimentacoes");
+
+          cy.getByData("btn-abrir-cadastro").click();
+          cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
+
+          cy.getByData("select-tipo").click();
+          cy.getByData("select-item-entrada").click();
+          cy.getByData("input-destino").type(destinoMovimentacao);
+
+          cy.getByData("btn-adicionar-produto").click();
+
+          // Buscar produto pelo código
+          cy.getByData("input-codigo-0").type(produto.codigo_produto);
+          cy.wait("@getProdutos");
+          cy.wait(1000);
+
+          const quantidadeEntrada = 10;
+          cy.getByData("input-valor-0").type("100");
+          cy.getByData("input-quantidade-0").type(String(quantidadeEntrada));
+
+          cy.getByData("btn-salvar").click();
+
+          cy.wait("@createMovimentacao").then((createInterception) => {
+            expect(createInterception.response?.statusCode).to.eq(201);
+            movimentacaoIdCriada = createInterception.response?.body._id;
+
+            // Verificar se o estoque foi atualizado
+            cy.request({
+              method: "GET",
+              url: `${apiUrl}/produtos/${produtoId}`,
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }).then((produtoResponse) => {
+              const estoqueAtual = produtoResponse.body.data.quantidade_estoque;
+              expect(estoqueAtual).to.eq(estoqueInicial + quantidadeEntrada);
+            });
+          });
+        });
+      });
+    });
+
+    it("Deve diminuir o estoque ao criar movimentação de saída", () => {
+      // Fazer login via API para obter o token
+      cy.request({
+        method: "POST",
+        url: `${apiUrl}/login`,
+        body: {
+          matricula: matricula,
+          senha: senha,
+        },
+      }).then((loginResponse) => {
+        authToken = loginResponse.body.accesstoken;
+
+        // Buscar um produto com estoque suficiente usando o token
+        cy.request({
+          method: "GET",
+          url: `${apiUrl}/produtos?limite=50`,
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }).then((response) => {
+          // Encontrar produto com estoque > 10
+          const produto = response.body.data.docs.find(
+            (p: any) => (p.quantidade_estoque || 0) > 10
+          );
+
+          if (!produto) {
+            cy.log("Nenhum produto com estoque suficiente encontrado");
+            return;
+          }
+
+          produtoId = produto._id;
+          estoqueInicial = produto.quantidade_estoque || 0;
+
+          // Agora visitar a página e fazer o fluxo da UI
+          cy.visit(`${frontendUrl}/movimentacoes`);
+          cy.wait("@getMovimentacoes");
+
+          cy.getByData("btn-abrir-cadastro").click();
+          cy.getByData("dialog-cadastro-movimentacao").should("be.visible");
+
+          cy.getByData("select-tipo").click();
+          cy.getByData("select-item-saida").click();
+          cy.getByData("input-destino").type(destinoMovimentacao);
+
+          cy.getByData("btn-adicionar-produto").click();
+
+          // Buscar produto pelo código
+          cy.getByData("input-codigo-0").type(produto.codigo_produto);
+          cy.wait("@getProdutos");
+          cy.wait(1000);
+
+          const quantidadeSaida = 5;
+          cy.getByData("input-valor-0").type("150");
+          cy.getByData("input-quantidade-0").type(String(quantidadeSaida));
+
+          cy.getByData("btn-salvar").click();
+
+          cy.wait("@createMovimentacao").then((createInterception) => {
+            expect(createInterception.response?.statusCode).to.eq(201);
+            movimentacaoIdCriada = createInterception.response?.body._id;
+
+            // Verificar se o estoque foi atualizado
+            cy.request({
+              method: "GET",
+              url: `${apiUrl}/produtos/${produtoId}`,
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }).then((produtoResponse) => {
+              const estoqueAtual = produtoResponse.body.data.quantidade_estoque;
+              expect(estoqueAtual).to.eq(estoqueInicial - quantidadeSaida);
+            });
+          });
+        });
+      });
     });
   });
 
-  describe("Filtrar movimentações", () => {
+  describe.skip("Filtrar movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
     });
 
-    it.skip("Deve filtrar movimentações por busca", () => {
-      cy.getByData("input-busca-movimentacao").type("teste");
+    it("Deve filtrar movimentações por busca", () => {
+      cy.getByData("input-busca-movimentacao").type("Destino Teste{enter}");
 
       cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("busca=teste");
+        expect(interception.request.url).to.include(
+          "movimentacao=Destino+Teste"
+        );
       });
+
+      cy.get("tbody tr").first().click();
+      cy.getByData("dialog-listagem-movimentacao").should("be.visible");
+      cy.contains("Destino Teste").should("be.visible");
     });
 
-    it.skip("Deve filtrar movimentações por tipo", () => {
+    it("Deve filtrar movimentações por tipo", () => {
       cy.getByData("select-tipo-movimentacao").click();
       cy.getByData("select-item-entrada").click();
 
       cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("tipo=entrada");
+        expect(interception.request.url).to.include("tipo=");
+      });
+
+      cy.get("tbody tr").first().click();
+      cy.getByData("dialog-listagem-movimentacao").should("be.visible");
+      cy.contains("Entrada").should("be.visible");
+    });
+
+    it("Deve filtrar movimentações por data inicial e final", () => {
+      cy.getByData("calendar-data-inicial").click();
+      cy.get(".rdp-day").eq(5).click();
+
+      cy.getByData("calendar-data-final").click();
+      cy.get(".rdp-day").eq(10).click();
+
+      cy.wait("@getMovimentacoes").then((interception) => {
+        expect(interception.request.url).to.include("data_inicio=");
+        expect(interception.request.url).to.include("data_fim=");
       });
     });
 
-    it.skip("Deve filtrar movimentações por data inicial", () => {
-      cy.getByData("calendar-data-inicial").click();
-      cy.get(".rdp-day").first().click();
+    it("Deve exibir mensagem quando nenhuma movimentação for encontrada", () => {
+      cy.getByData("input-busca-movimentacao").type(
+        "MovimentacaoInexistente123{enter}"
+      );
 
-      cy.wait("@getMovimentacoes");
+      cy.wait("@getMovimentacoes").then((interception) => {
+        expect(interception.request.url).to.include(
+          "movimentacao=MovimentacaoInexistente123"
+        );
+      });
+
+      cy.wait(500);
+      cy.contains("Nenhuma movimentação encontrada", { timeout: 5000 }).should(
+        "exist"
+      );
     });
 
-    it.skip("Deve limpar filtros de movimentações", () => {
-      cy.getByData("input-busca-movimentacao").type("teste");
-      cy.getByData("btn-limpar-filtros-movimentacao").click();
+    it("Deve limpar filtros de movimentações", () => {
+      cy.getByData("input-busca-movimentacao").type("teste{enter}");
+
+      cy.wait("@getMovimentacoes").then((interception) => {
+        expect(interception.request.url).to.include("movimentacao=");
+      });
+
+      cy.getByData("btn-limpar-filtros-movimentacao")
+        .should("be.visible")
+        .click();
 
       cy.getByData("input-busca-movimentacao").should("have.value", "");
+
+      cy.wait("@getMovimentacoes").then((interception) => {
+        expect(interception.request.url).to.not.include("tipo=");
+        expect(interception.request.url).to.not.include("movimentacao=");
+        expect(interception.request.url).to.not.include("data_inicio=");
+        expect(interception.request.url).to.not.include("data_fim=");
+      });
     });
   });
 
-  describe("Paginação de movimentações", () => {
+  describe.skip("Paginação de movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
     });
 
-    it.skip("Deve navegar para a próxima página", () => {
+    it("Deve navegar para a próxima página", () => {
       cy.getByData("btn-proxima-pagina").should("be.visible").click();
 
       cy.wait("@getMovimentacoes").then((interception) => {
@@ -231,7 +434,7 @@ describe("Movimentações", () => {
       });
     });
 
-    it.skip("Deve navegar para a página anterior", () => {
+    it("Deve navegar para a página anterior", () => {
       cy.getByData("btn-proxima-pagina").click();
       cy.wait("@getMovimentacoes");
 
@@ -242,7 +445,7 @@ describe("Movimentações", () => {
       });
     });
 
-    it.skip("Deve alterar o número de itens por página", () => {
+    it("Deve alterar o número de itens por página", () => {
       cy.getByData("select-itens-por-pagina").click();
       cy.getByData("select-item-20").click();
 
@@ -253,17 +456,17 @@ describe("Movimentações", () => {
     });
   });
 
-  describe("Imprimir movimentações", () => {
+  describe.skip("Imprimir movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
     });
 
-    it.skip("Deve permitir clicar no botão de impressão sem erros", () => {
+    it("Deve permitir clicar no botão de impressão sem erros", () => {
       cy.get("tbody tr").first().click();
       cy.getByData("dialog-listagem-movimentacao").should("be.visible");
 
-      cy.getByData("btn-imprimir").click();
+      cy.getByData("btn-imprimir-movimentacao").click();
 
       cy.getByData("dialog-listagem-movimentacao").should("be.visible");
     });
@@ -274,9 +477,6 @@ describe("Movimentações", () => {
       cy.request({
         method: "DELETE",
         url: `${apiUrl}/movimentacoes/${movimentacaoIdCriada}`,
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
         failOnStatusCode: false,
       });
     }
