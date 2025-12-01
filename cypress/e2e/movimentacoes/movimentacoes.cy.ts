@@ -85,32 +85,32 @@ describe("Movimentações", () => {
       cy.getByData("input-quantidade-0").should("be.visible");
     });
 
-    it.skip("Deve buscar produto por código", () => {
+    it("Deve buscar produto por código", () => {
       cy.getByData("btn-adicionar-produto").click();
 
-      cy.intercept("GET", `${apiUrl}/produtos?codigo_produto=TEST*`, {
-        statusCode: 200,
-        body: {
-          data: {
-            docs: [
-              {
-                _id: "produto-id-123",
-                nome_produto: "Produto Teste",
-                codigo_produto: "TEST123",
-              },
-            ],
-          },
-        },
-      }).as("buscarProduto");
+      cy.getByData("input-codigo-0").type("DIS");
 
-      cy.getByData("input-codigo-0").type("TEST123");
+      cy.wait("@getProdutos");
+      cy.wait(500);
 
-      cy.wait("@buscarProduto");
-
-      cy.getByData("input-nome-0").should("have.value", "Produto Teste");
+      cy.getByData("input-nome-0").invoke("val").should("not.be.empty");
     });
 
-    //TODO: verificar
+    it.skip("Deve buscar produto por nome e selecionar do dropdown", () => {
+      cy.getByData("btn-adicionar-produto").click();
+
+      cy.getByData("search-wrapper-0").should("be.visible");
+      cy.getByData("input-nome-0").type("Algodão");
+
+      cy.wait("@getProdutos");
+      cy.wait(500);
+
+      cy.get('[data-test^="product-search-item-0-"]').first().click();
+
+      cy.getByData("input-nome-0").should("have.class", "bg-gray-100");
+      cy.getByData("input-codigo-0").invoke("val").should("not.be.empty");
+    });
+
     it("Deve criar movimentação de entrada com sucesso", () => {
       cy.getByData("select-tipo").click();
       cy.getByData("select-item-entrada").click();
@@ -119,23 +119,13 @@ describe("Movimentações", () => {
 
       cy.getByData("btn-adicionar-produto").click();
 
-      cy.intercept("GET", `${apiUrl}/produtos?codigo_produto=TEST*`, {
-        statusCode: 200,
-        body: {
-          data: {
-            docs: [
-              {
-                _id: "produto-id-123",
-                nome_produto: "Produto Teste",
-                codigo_produto: "TEST123",
-              },
-            ],
-          },
-        },
-      }).as("buscarProduto");
+      // Buscar produto por nome usando o dropdown
+      cy.getByData("input-nome-0").type("Algodão");
+      cy.wait("@getProdutos");
+      cy.wait(500);
 
-      cy.getByData("input-codigo-0").type("TEST123");
-      cy.wait("@buscarProduto");
+      cy.get('[data-test^="product-search-item-0-"]').first().click();
+
       cy.getByData("input-valor-0").type("100");
       cy.getByData("input-quantidade-0").type("10");
 
@@ -158,23 +148,11 @@ describe("Movimentações", () => {
 
       cy.getByData("btn-adicionar-produto").click();
 
-      cy.intercept("GET", `${apiUrl}/produtos?codigo_produto=TEST*`, {
-        statusCode: 200,
-        body: {
-          data: {
-            docs: [
-              {
-                _id: "produto-id-123",
-                nome_produto: "Produto Teste",
-                codigo_produto: "TEST123",
-              },
-            ],
-          },
-        },
-      }).as("buscarProduto");
+      // Buscar produto por código
+      cy.getByData("input-codigo-0").type("DIS");
+      cy.wait("@getProdutos");
+      cy.wait(500);
 
-      cy.getByData("input-codigo-0").type("TEST123");
-      cy.wait("@buscarProduto");
       cy.getByData("input-valor-0").type("150");
       cy.getByData("input-quantidade-0").type("5");
 

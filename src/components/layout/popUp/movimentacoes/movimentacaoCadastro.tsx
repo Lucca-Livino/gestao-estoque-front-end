@@ -89,6 +89,11 @@ export function CadastroMovimentacao({
   });
 
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchNameTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [searchResults, setSearchResults] = useState<Record<number, any[]>>({});
+  const [searchQueries, setSearchQueries] = useState<Record<number, string>>(
+    {}
+  );
 
   const [formData, setFormData] = useState({
     tipo: "",
@@ -266,6 +271,33 @@ export function CadastroMovimentacao({
         ...prev,
         [`produto_${index}_codigo`]: "Erro ao buscar produto",
       }));
+    }
+  };
+
+  const buscarProdutoPorNome = async (query: string, index: number) => {
+    if (!query.trim()) {
+      setSearchResults((prev) => ({ ...prev, [index]: [] }));
+      return;
+    }
+
+    if (!session?.user?.accesstoken) {
+      return;
+    }
+
+    try {
+      const response = await fetchData<any>(
+        `/produtos?produto=${encodeURIComponent(query)}`,
+        "GET",
+        session.user.accesstoken
+      );
+
+      if (response && response.data && response.data.docs) {
+        setSearchResults((prev) => ({ ...prev, [index]: response.data.docs }));
+      } else {
+        setSearchResults((prev) => ({ ...prev, [index]: [] }));
+      }
+    } catch (error) {
+      setSearchResults((prev) => ({ ...prev, [index]: [] }));
     }
   };
 
@@ -607,15 +639,88 @@ export function CadastroMovimentacao({
                         <FieldLabel htmlFor={`nome-${index}`}>
                           Nome do Produto
                         </FieldLabel>
-                        <Input
-                          id={`nome-${index}`}
-                          autoComplete="off"
-                          placeholder="Nome será preenchido automaticamente"
-                          value={produto.nome}
-                          readOnly
-                          className="bg-gray-100"
-                          data-test={`input-nome-${index}`}
-                        />
+                        {produto.nome ? (
+                          <Input
+                            id={`nome-${index}`}
+                            autoComplete="off"
+                            placeholder="Nome será preenchido automaticamente"
+                            value={produto.nome}
+                            readOnly
+                            className="bg-gray-100"
+                            data-test={`input-nome-${index}`}
+                          />
+                        ) : (
+                          <div
+                            className="relative"
+                            data-test={`search-wrapper-${index}`}
+                          >
+                            <Input
+                              id={`nome-${index}`}
+                              autoComplete="off"
+                              placeholder="Busque pelo tipo de item ou nome completo"
+                              value={searchQueries[index] || ""}
+                              onChange={(e) => {
+                                const q = e.target.value;
+                                setSearchQueries((prev) => ({
+                                  ...prev,
+                                  [index]: q,
+                                }));
+                                // debounce
+                                if (searchNameTimeoutRef.current)
+                                  clearTimeout(searchNameTimeoutRef.current);
+                                searchNameTimeoutRef.current = setTimeout(
+                                  () => {
+                                    buscarProdutoPorNome(q, index);
+                                  },
+                                  350
+                                );
+                              }}
+                              data-test={`input-nome-${index}`}
+                            />
+
+                            {searchResults[index] &&
+                              searchResults[index].length > 0 && (
+                                <div className="absolute left-0 right-0 z-50 mt-1 bg-white border rounded shadow max-h-48 overflow-auto">
+                                  {searchResults[index].map((res: any) => (
+                                    <button
+                                      key={res._id}
+                                      type="button"
+                                      className="w-full text-left px-3 py-2 hover:bg-gray-100 flex flex-col gap-1"
+                                      onClick={() => {
+                                        atualizarProduto(index, "id", res._id);
+                                        atualizarProduto(
+                                          index,
+                                          "nome",
+                                          res.nome_produto
+                                        );
+                                        atualizarProduto(
+                                          index,
+                                          "codigo",
+                                          res.codigo_produto || ""
+                                        );
+                                        setSearchResults((prev) => ({
+                                          ...prev,
+                                          [index]: [],
+                                        }));
+                                        setSearchQueries((prev) => ({
+                                          ...prev,
+                                          [index]: "",
+                                        }));
+                                      }}
+                                      data-test={`product-search-item-${index}-${res._id}`}
+                                    >
+                                      <span className="font-medium text-sm truncate">
+                                        {res.nome_produto}
+                                      </span>
+                                      <span className="text-xs text-gray-500">
+                                        {res.codigo_produto}
+                                      </span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                          </div>
+                        )}
                       </Field>
                     </div>
 
