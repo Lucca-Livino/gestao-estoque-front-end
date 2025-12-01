@@ -293,7 +293,9 @@ export function CadastroMovimentacao({
 
   const save = () => {
     if (!tipo || !destino || produtos.length === 0) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error(
+        <div data-test="toast-error">Preencha todos os campos obrigatórios</div>
+      );
       return;
     }
 
@@ -388,7 +390,11 @@ export function CadastroMovimentacao({
         />
       </DialogTrigger>
 
-      <DialogContent showCloseButton={false} className="gap-8">
+      <DialogContent
+        showCloseButton={false}
+        className="gap-8"
+        data-test="dialog-cadastro-movimentacao"
+      >
         <DialogHeader className="flex flex-col gap-4 py-2 border-b">
           <DialogTitle>Cadastro de movimentações</DialogTitle>
           <DialogDescription>
@@ -402,12 +408,16 @@ export function CadastroMovimentacao({
               <Field>
                 <FieldLabel htmlFor="tipo">Tipo*</FieldLabel>
                 <Select value={tipo} onValueChange={setTipo}>
-                  <SelectTrigger id="tipo">
+                  <SelectTrigger id="tipo" data-test="select-tipo">
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="entrada">Entrada</SelectItem>
-                    <SelectItem value="saida">Saída</SelectItem>
+                    <SelectItem value="entrada" data-test="select-item-entrada">
+                      Entrada
+                    </SelectItem>
+                    <SelectItem value="saida" data-test="select-item-saida">
+                      Saída
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -421,6 +431,7 @@ export function CadastroMovimentacao({
                   onChange={(e) => {
                     setDestino(capitalizeFirst(e.target.value));
                   }}
+                  data-test="input-destino"
                 />
               </Field>
             </div>
@@ -445,6 +456,7 @@ export function CadastroMovimentacao({
                       onChange={(e) =>
                         atualizarNotaFiscal("numero", e.target.value)
                       }
+                      data-test="input-nf-numero"
                     />
                   </Field>
                   <Field>
@@ -460,6 +472,7 @@ export function CadastroMovimentacao({
                       onChange={(e) =>
                         atualizarNotaFiscal("serie", e.target.value)
                       }
+                      data-test="input-nf-serie"
                     />
                   </Field>
                 </div>
@@ -478,6 +491,7 @@ export function CadastroMovimentacao({
                       onChange={(e) =>
                         atualizarNotaFiscal("chave", e.target.value)
                       }
+                      data-test="input-nf-chave"
                     />
                   </Field>
                   <Field>
@@ -490,6 +504,7 @@ export function CadastroMovimentacao({
                       onChange={(e) =>
                         atualizarNotaFiscal("data_emissao", e.target.value)
                       }
+                      data-test="input-nf-data"
                     />
                   </Field>
                 </div>
@@ -508,6 +523,7 @@ export function CadastroMovimentacao({
                     setObservacoes(capitalizeFirst(e.target.value))
                   }
                   rows={3}
+                  data-test="textarea-observacoes"
                 />
               </Field>
             </div>
@@ -522,6 +538,7 @@ export function CadastroMovimentacao({
                   className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-1"
                   onClick={adicionarProduto}
                   size="sm"
+                  data-test="btn-adicionar-produto"
                 >
                   <Plus className="w-4 h-4" />
                   Adicionar produto
@@ -550,6 +567,7 @@ export function CadastroMovimentacao({
                       variant="outline"
                       size="sm"
                       className="text-red-600 hover:text-red-700 hover:bg-red-100 cursor-pointer"
+                      data-test={`btn-remover-produto-${index}`}
                     >
                       <Trash className="w-4 h-4" />
                     </Button>
@@ -576,6 +594,7 @@ export function CadastroMovimentacao({
                               buscarProdutoPorCodigo(e.target.value, index);
                             }, 500);
                           }}
+                          data-test={`input-codigo-${index}`}
                         />
                         {errors[`produto_${index}_codigo`] && (
                           <FieldError>
@@ -595,6 +614,7 @@ export function CadastroMovimentacao({
                           value={produto.nome}
                           readOnly
                           className="bg-gray-100"
+                          data-test={`input-nome-${index}`}
                         />
                       </Field>
                     </div>
@@ -619,6 +639,7 @@ export function CadastroMovimentacao({
                           onChange={(e) =>
                             atualizarProduto(index, "valor", e.target.value)
                           }
+                          data-test={`input-valor-${index}`}
                         />
                       </Field>
 
@@ -639,6 +660,7 @@ export function CadastroMovimentacao({
                               e.target.value
                             )
                           }
+                          data-test={`input-quantidade-${index}`}
                         />
                       </Field>
                     </div>
@@ -654,6 +676,7 @@ export function CadastroMovimentacao({
               onClick={() => handleOpenChange(false)}
               className="w-1/2 cursor-pointer text-black bg-transparent border hover:bg-neutral-50"
               data-slot="dialog-close"
+              data-test="btn-cancelar"
             >
               Cancelar
             </Button>
@@ -661,6 +684,7 @@ export function CadastroMovimentacao({
               onClick={save}
               disabled={isPending}
               className="w-1/2 cursor-pointer bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              data-test="btn-salvar"
             >
               <Save className="w-4 h-4 mr-1" />
               {isPending ? "Salvando..." : "Salvar"}
