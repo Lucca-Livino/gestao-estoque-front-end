@@ -1,9 +1,17 @@
 "use client";
 
 import { Package, FileText } from "lucide-react";
-import { StatCard as StatCardType, ModuleCard as ModuleCardType } from "@/types/Dashboard";
+import {
+  StatCard as StatCardType,
+  ModuleCard as ModuleCardType,
+} from "@/types/Dashboard";
+import { getAllowedRoutes } from "@/lib/permissions";
+import { useSession } from "next-auth/react";
 
 export default function DashboardNavigation() {
+  const { data: session } = useSession();
+  const userRole = session?.user?.perfil;
+  const allowedRoutes = getAllowedRoutes(userRole);
   const statCards: StatCardType[] = [
     {
       id: "categoria-a",
@@ -19,7 +27,7 @@ export default function DashboardNavigation() {
     },
     {
       id: "categoria-c",
-      title: "Categoria", 
+      title: "Categoria",
       value: "C",
       icon: Package,
     },
@@ -66,8 +74,14 @@ export default function DashboardNavigation() {
     },
   ];
 
+  const filteredModuleCards = moduleCards.filter((card) => {
+    if (!card.href) return false;
+    const routeKey = card.href.replace("/", "");
+    return allowedRoutes.includes(routeKey as any);
+  });
+
   return {
     statCards,
-    moduleCards,
+    moduleCards: filteredModuleCards,
   };
 }

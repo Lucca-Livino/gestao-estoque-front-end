@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function UserMenu() {
   const [open, setOpen] = useState(false);
@@ -21,17 +22,26 @@ export default function UserMenu() {
     router.push("/logout");
   };
 
+  const { data: session } = useSession();
+  const userName: string = session?.user?.nome_usuario || "Usuário";
+  const userAbbreviation: string = userName
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <div className="flex items-center space-x-3 cursor-pointer">
           <div className="text-right">
-            <h5 className="text-sm font-medium text-white mr-1.5">Anna Cors</h5>
+            <h5 className="text-sm font-medium text-white mr-1.5">{userName}</h5>
           </div>
 
           <Avatar className="h-10 w-10">
             <AvatarImage src="/avatar.png" alt="User Avatar" />
-            <AvatarFallback>AC</AvatarFallback>
+            <AvatarFallback className="text-blue-700">{userAbbreviation}</AvatarFallback>
           </Avatar>
 
           <ChevronDown
