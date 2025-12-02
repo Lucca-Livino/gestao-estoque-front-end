@@ -27,7 +27,7 @@ describe("Movimentações", () => {
     cy.login(matricula, senha);
   });
 
-  describe.skip("Cadastrar movimentação", () => {
+  describe("Cadastrar movimentação", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
@@ -184,36 +184,33 @@ describe("Movimentações", () => {
     });
   });
 
-  //TODO:  review
   describe("Verificar atualização de estoque", () => {
     let produtoId: string;
     let estoqueInicial: number;
 
     it("Deve aumentar o estoque ao criar movimentação de entrada", () => {
-      // Fazer login via API para obter o token
       cy.request({
         method: "POST",
         url: `${apiUrl}/login`,
         body: {
-          matricula: matricula,
-          senha: senha,
+          matricula: 'GER0001',
+          senha: 'Gerente@123',
         },
       }).then((loginResponse) => {
-        authToken = loginResponse.body.accesstoken;
+        const authToken = loginResponse.body.accessToken;
 
-        // Buscar um produto existente usando o token
         cy.request({
           method: "GET",
-          url: `${apiUrl}/produtos?limite=1`,
+          url: `${apiUrl}/produtos`,
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         }).then((response) => {
+          console.log(response);
           const produto = response.body.data.docs[0];
           produtoId = produto._id;
-          estoqueInicial = produto.quantidade_estoque || 0;
+          estoqueInicial = produto.estoque || 0;
 
-          // Agora visitar a página e fazer o fluxo da UI
           cy.visit(`${frontendUrl}/movimentacoes`);
           cy.wait("@getMovimentacoes");
 
@@ -226,7 +223,6 @@ describe("Movimentações", () => {
 
           cy.getByData("btn-adicionar-produto").click();
 
-          // Buscar produto pelo código
           cy.getByData("input-codigo-0").type(produto.codigo_produto);
           cy.wait("@getProdutos");
           cy.wait(1000);
@@ -239,9 +235,7 @@ describe("Movimentações", () => {
 
           cy.wait("@createMovimentacao").then((createInterception) => {
             expect(createInterception.response?.statusCode).to.eq(201);
-            movimentacaoIdCriada = createInterception.response?.body._id;
 
-            // Verificar se o estoque foi atualizado
             cy.request({
               method: "GET",
               url: `${apiUrl}/produtos/${produtoId}`,
@@ -249,7 +243,8 @@ describe("Movimentações", () => {
                 Authorization: `Bearer ${authToken}`,
               },
             }).then((produtoResponse) => {
-              const estoqueAtual = produtoResponse.body.data.quantidade_estoque;
+              const estoqueAtual = produtoResponse.body.data.estoque;
+              console.log(estoqueAtual);
               expect(estoqueAtual).to.eq(estoqueInicial + quantidadeEntrada);
             });
           });
@@ -258,28 +253,25 @@ describe("Movimentações", () => {
     });
 
     it("Deve diminuir o estoque ao criar movimentação de saída", () => {
-      // Fazer login via API para obter o token
       cy.request({
         method: "POST",
         url: `${apiUrl}/login`,
         body: {
-          matricula: matricula,
-          senha: senha,
+          matricula: 'GER0001',
+          senha: 'Gerente@123',
         },
       }).then((loginResponse) => {
-        authToken = loginResponse.body.accesstoken;
+        const authToken = loginResponse.body.accessToken;
 
-        // Buscar um produto com estoque suficiente usando o token
         cy.request({
           method: "GET",
-          url: `${apiUrl}/produtos?limite=50`,
+          url: `${apiUrl}/produtos`,
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         }).then((response) => {
-          // Encontrar produto com estoque > 10
           const produto = response.body.data.docs.find(
-            (p: any) => (p.quantidade_estoque || 0) > 10
+            (p: any) => (p.estoque || 0) > 10
           );
 
           if (!produto) {
@@ -288,9 +280,8 @@ describe("Movimentações", () => {
           }
 
           produtoId = produto._id;
-          estoqueInicial = produto.quantidade_estoque || 0;
+          estoqueInicial = produto.estoque || 0;
 
-          // Agora visitar a página e fazer o fluxo da UI
           cy.visit(`${frontendUrl}/movimentacoes`);
           cy.wait("@getMovimentacoes");
 
@@ -303,7 +294,6 @@ describe("Movimentações", () => {
 
           cy.getByData("btn-adicionar-produto").click();
 
-          // Buscar produto pelo código
           cy.getByData("input-codigo-0").type(produto.codigo_produto);
           cy.wait("@getProdutos");
           cy.wait(1000);
@@ -316,9 +306,7 @@ describe("Movimentações", () => {
 
           cy.wait("@createMovimentacao").then((createInterception) => {
             expect(createInterception.response?.statusCode).to.eq(201);
-            movimentacaoIdCriada = createInterception.response?.body._id;
 
-            // Verificar se o estoque foi atualizado
             cy.request({
               method: "GET",
               url: `${apiUrl}/produtos/${produtoId}`,
@@ -326,7 +314,8 @@ describe("Movimentações", () => {
                 Authorization: `Bearer ${authToken}`,
               },
             }).then((produtoResponse) => {
-              const estoqueAtual = produtoResponse.body.data.quantidade_estoque;
+              const estoqueAtual = produtoResponse.body.data.estoque;
+              console.log(estoqueAtual);
               expect(estoqueAtual).to.eq(estoqueInicial - quantidadeSaida);
             });
           });
@@ -335,7 +324,7 @@ describe("Movimentações", () => {
     });
   });
 
-  describe.skip("Filtrar movimentações", () => {
+  describe("Filtrar movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
@@ -420,7 +409,7 @@ describe("Movimentações", () => {
     });
   });
 
-  describe.skip("Paginação de movimentações", () => {
+  describe("Paginação de movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
@@ -456,7 +445,7 @@ describe("Movimentações", () => {
     });
   });
 
-  describe.skip("Imprimir movimentações", () => {
+  describe("Imprimir movimentações", () => {
     beforeEach(() => {
       cy.visit(`${frontendUrl}/movimentacoes`);
       cy.wait("@getMovimentacoes");
