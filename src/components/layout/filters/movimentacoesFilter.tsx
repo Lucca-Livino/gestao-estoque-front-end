@@ -136,6 +136,7 @@ export function MovimentacoesFilter({
           const novo = v === "todos" ? "" : v;
           setTipoProduto(novo);
         }}
+        data-test="select-tipo-movimentacao"
       >
         <SelectTrigger className="w-[120px] cursor-pointer" data-test="select-tipo-movimentacao">
           <SelectValue placeholder="Tipo" />

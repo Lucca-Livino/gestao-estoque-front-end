@@ -15,14 +15,11 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { data: session, status } = useSession();
-
-  // Verifica se deve redirecionar baseado em manter logado
+  
   useEffect(() => {
-    if (status === "authenticated") {
-      // Se tem erro de refresh, limpa tudo e força logout
+    if (status === "authenticated") {      
       if ((session as any)?.error === "RefreshAccessTokenError") {
-        localStorage.removeItem("manterLogado");
-        // Força signOut para limpar sessão inválida
+        localStorage.removeItem("manterLogado");        
         import("next-auth/react").then(({ signOut }) => {
           signOut({ redirect: false });
         });
@@ -30,12 +27,10 @@ export default function Login() {
       }
 
       const manterLogadoStorage = localStorage.getItem("manterLogado");
-
-      // Se manterLogado está ativo, redireciona para home
+      
       if (manterLogadoStorage === "true") {
         router.push("/home");
-      } else {
-        // Se não está ativo, faz logout silencioso para permitir novo login
+      } else {        
         localStorage.removeItem("manterLogado");
       }
     }
@@ -46,8 +41,7 @@ export default function Login() {
     setIsLoading(true);
     setError("");
 
-    try {
-      // Salva a preferência de manter logado no localStorage
+    try {      
       localStorage.setItem("manterLogado", manterLogado.toString());
 
       const result = await signIn("credentials", {
@@ -68,8 +62,7 @@ export default function Login() {
       setIsLoading(false);
     }
   };
-
-  // Mostra loading enquanto verifica a sessão
+  
   if (status === "loading") {
     return (
       <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white">
@@ -77,12 +70,9 @@ export default function Login() {
       </div>
     );
   }
-
-  // Não renderiza o formulário se já estiver autenticado E manterLogado estiver ativo
-  if (status === "authenticated") {
-    // Se tem erro de refresh token, mostra o formulário
-    if ((session as any)?.error === "RefreshAccessTokenError") {
-      // Permite mostrar o formulário para novo login
+  
+  if (status === "authenticated") {    
+    if ((session as any)?.error === "RefreshAccessTokenError") {      
     } else {
       const manterLogadoStorage =
         typeof window !== "undefined"
@@ -91,8 +81,7 @@ export default function Login() {
       if (manterLogadoStorage === "true") {
         return null;
       }
-    }
-    // Se não está com manterLogado, mostra o formulário normalmente
+    }    
   }
 
   return (
@@ -111,7 +100,7 @@ export default function Login() {
             transformOrigin: "center",
           }}
         >
-          <div className="w-full h-full bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] rounded-tl-full"></div>
+          <div className="w-full h-full bg-linear-to-br from-[#2563eb] to-[#1d4ed8] rounded-tl-full"></div>
         </div>
 
         <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 relative z-10">
@@ -134,7 +123,7 @@ export default function Login() {
                       type="text"
                       id="matricula"
                       value={matricula}
-                      onChange={(e) => setMatricula(e.target.value)}
+                      onChange={(e) => setMatricula(e.target.value.toUpperCase())}
                       className="w-full px-4 py-3 border-0 bg-gray-100 rounded-lg focus:ring-2 focus:ring-[#0042D9] focus:bg-white outline-none transition-all"
                       placeholder="Digite sua matrícula"
                       required
