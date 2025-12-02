@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/select";
 import { SearchIcon, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// Importação corrigida para usar o tipo e a lista de perfis do novo arquivo Funcionario.ts
 import { PERFIS_USUARIO, PerfilUsuario } from "@/types/Funcionarios";
 
 export interface FuncionariosFilterProps {
