@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { useUserProfile } from "@/contexts/UserProfileContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,10 +10,10 @@ import Header from "@/components/layout/header";
 
 export default function PerfilPage() {
   const { data: session } = useSession();
+  const { fotoPerfil, atualizarFotoPerfil } = useUserProfile();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingPhoto, UpandoFoto] = useState(false);
-  const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     nome: "José Silva",
     email: "jose.silva@gmail.com",
@@ -75,12 +76,12 @@ export default function PerfilPage() {
         throw new Error(result.error?.message || 'Erro ao fazer upload da foto');
       }
 
-      // Atualiza a foto no estado
+      // Atualiza a foto no contexto global
       const novaFotoUrl = `${API_URL}${result.data.foto_perfil}`;
       console.log('Nova URL da foto:', novaFotoUrl);
       console.log('Dados retornados:', result.data);
       
-      setFotoPerfil(novaFotoUrl);
+      atualizarFotoPerfil(novaFotoUrl);
 
       alert("Foto de perfil atualizada com sucesso!");
     } catch (error: any) {
@@ -107,7 +108,7 @@ export default function PerfilPage() {
                   <div className="relative">
                     <Avatar className="h-48 w-48 border-4 border-white/20 shadow-2xl">
                       <AvatarImage 
-                        src={fotoPerfil || "/avatar.png"} 
+                        src={fotoPerfil || "/foto-perfil.jpeg"} 
                         alt="User Avatar" 
                       />
                       <AvatarFallback className="text-5xl bg-blue-700 text-white">
