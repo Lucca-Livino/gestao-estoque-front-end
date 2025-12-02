@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { SearchIcon, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PerfilUsuario } from "@/types/Usuario";
+import { PerfilUsuario } from "@/types/Funcionarios";
 
 export interface UsuariosFilterProps {
 	nomeUsuario?: string;
