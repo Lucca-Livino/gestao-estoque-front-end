@@ -11,6 +11,7 @@ declare module "next-auth" {
 			perfil: string;
 			accesstoken: string;
 			refreshtoken: string;
+			telefone?: string;
 		};
 	}
 
@@ -22,6 +23,7 @@ declare module "next-auth" {
 		perfil: string;
 		accesstoken: string;
 		refreshtoken: string;
+		telefone?: string;
 	}
 
 }
@@ -35,6 +37,7 @@ declare module "next-auth/jwt" {
 		perfil: string;
 		accesstoken: string;
 		refreshtoken: string;
+		telefone?: string;
 		accessTokenExpires?: number;
 		error?: string;
 	}

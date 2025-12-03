@@ -68,6 +68,7 @@ export const authOptions: NextAuthOptions = {
             email: json.usuario.email ?? "",
             matricula: json.usuario.matricula ?? "",
             perfil: json.usuario.perfil ?? "",
+            telefone: json.usuario.telefone ?? "",
             accesstoken: json.accessToken ?? "",
             refreshtoken: json.refreshToken ?? "",
             manterLogado: credentials.manterLogado === "true",
