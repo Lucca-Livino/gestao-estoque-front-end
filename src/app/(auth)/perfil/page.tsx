@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,29 +10,108 @@ import Header from "@/components/layout/header";
 
 export default function PerfilPage() {
   const { data: session } = useSession();
-  const { fotoPerfil, atualizarFotoPerfil } = useUserProfile();
+  const { fotoPerfil, atualizarFotoPerfil, dadosUsuario, atualizarDadosUsuario } = useUserProfile();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingPhoto, UpandoFoto] = useState(false);
-  const [formData, setFormData] = useState({
-    nome: "José Silva",
-    email: "jose.silva@gmail.com",
-    telefone: "(69) 992222-2222",
-  });
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Obter dados do usuário logado
   const usuario = session?.user;
   const matricula = usuario?.matricula || "";
-  const nomeUsuario = usuario?.nome_usuario || "Usuário";
-  const emailUsuario = usuario?.email || "";
   const perfilUsuario = usuario?.perfil || "";
+
+  const nomeUsuario = dadosUsuario?.nome_usuario || usuario?.nome_usuario || "Usuário";
+  const emailUsuario = dadosUsuario?.email || usuario?.email || "";
+  const telefoneUsuario = dadosUsuario?.telefone || usuario?.telefone || "";
+
+  const [formData, setFormData] = useState({
+    nome_usuario: nomeUsuario,
+    email: emailUsuario,
+    telefone: telefoneUsuario,
+  });
+
+  useEffect(() => {
+    setFormData({
+      nome_usuario: nomeUsuario,
+      email: emailUsuario,
+      telefone: telefoneUsuario,
+    });
+  }, [nomeUsuario, emailUsuario, telefoneUsuario]);
 
   const handleCancel = () => {
     setIsEditing(false);
+    setFormData({
+      nome_usuario: dadosUsuario?.nome_usuario || nomeUsuario,
+      email: dadosUsuario?.email || emailUsuario,
+      telefone: dadosUsuario?.telefone || telefoneUsuario,
+    });
   };
 
   const handleEdit = () => {
-    setIsEditing(false);
+    if (!isEditing) {
+      setIsEditing(true);
+    } else {
+      handleSave();
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+
+      if (!formData.nome_usuario || formData.nome_usuario.trim().length < 3) {
+        alert("Nome deve ter pelo menos 3 caracteres");
+        return;
+      }
+
+      if (!formData.email || !formData.email.includes("@")) {
+        alert("Email inválido");
+        return;
+      }
+
+      const telefoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+      if (!formData.telefone || !telefoneRegex.test(formData.telefone)) {
+        alert("Telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX");
+        return;
+      }
+
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      
+      const response = await fetch(`${API_URL}/usuarios/${matricula}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${usuario?.accesstoken}`,
+        },
+        body: JSON.stringify({
+          nome_usuario: formData.nome_usuario,
+          email: formData.email,
+          telefone: formData.telefone,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error?.message || 'Erro ao atualizar perfil');
+      }
+
+      const novosDados = {
+        nome_usuario: formData.nome_usuario,
+        email: formData.email,
+        telefone: formData.telefone,
+      };
+      
+      atualizarDadosUsuario(novosDados);
+
+      alert("Perfil atualizado com sucesso!");
+      setIsEditing(false);
+    } catch (error: any) {
+      console.error('Erro ao salvar:', error);
+      alert(error.message || "Erro ao atualizar perfil");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handlePhotoButtonClick = () => {
@@ -76,11 +155,7 @@ export default function PerfilPage() {
         throw new Error(result.error?.message || 'Erro ao fazer upload da foto');
       }
 
-      // Atualiza a foto no contexto global
       const novaFotoUrl = `${API_URL}${result.data.foto_perfil}`;
-      console.log('Nova URL da foto:', novaFotoUrl);
-      console.log('Dados retornados:', result.data);
-      
       atualizarFotoPerfil(novaFotoUrl);
 
       alert("Foto de perfil atualizada com sucesso!");
@@ -121,7 +196,6 @@ export default function PerfilPage() {
                     {nomeUsuario}
                   </h2>
 
-                  {/* User Role */}
                   <p className="text-lg text-white/90 font-medium">
                     {perfilUsuario.charAt(0).toUpperCase() + perfilUsuario.slice(1)}
                   </p>
@@ -152,15 +226,15 @@ export default function PerfilPage() {
 
                 <div className="space-y-8">
                   <div>
-                    <label htmlFor="nome" className="block text-white text-lg font-medium mb-3">
+                    <label htmlFor="nome_usuario" className="block text-white text-lg font-medium mb-3">
                       Nome
                     </label>
                     <Input
-                      id="nome"
+                      id="nome_usuario"
                       type="text"
-                      value={formData.nome}
+                      value={formData.nome_usuario}
                       onChange={(e) =>
-                        setFormData({ ...formData, nome: e.target.value })
+                        setFormData({ ...formData, nome_usuario: e.target.value })
                       }
                       disabled={!isEditing}
                       className="bg-white/90 text-gray-800 border-0 rounded-xl h-14 text-base px-6 placeholder:text-gray-400 disabled:opacity-90 disabled:cursor-default"
@@ -193,29 +267,47 @@ export default function PerfilPage() {
                       id="telefone"
                       type="tel"
                       value={formData.telefone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, telefone: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        let formattedValue = '';
+                        
+                        if (value.length > 0) {
+                          formattedValue = '(' + value.substring(0, 2);
+                        }
+                        if (value.length >= 3) {
+                          formattedValue += ') ' + value.substring(2, 7);
+                        }
+                        if (value.length >= 7) {
+                          formattedValue += '-' + value.substring(7, 11);
+                        }
+                        
+                        setFormData({ ...formData, telefone: formattedValue });
+                      }}
                       disabled={!isEditing}
+                      maxLength={15}
                       className="bg-white/90 text-gray-800 border-0 rounded-xl h-14 text-base px-6 placeholder:text-gray-400 disabled:opacity-90 disabled:cursor-default"
-                      placeholder="(69) 992222-2222"
+                      placeholder="(69) 99999-9999"
                     />
                   </div>
                 </div>
 
                 <div className="flex justify-end gap-4 mt-12">
-                  <Button
-                    onClick={handleCancel}
-                    variant="outline"
-                    className="bg-blue-900/60 hover:bg-blue-800/70 text-white border-white/30 hover:border-white/50 px-10 py-3 rounded-xl text-base font-medium transition-all"
-                  >
-                    Cancelar
-                  </Button>
+                  {isEditing && (
+                    <Button
+                      onClick={handleCancel}
+                      variant="outline"
+                      disabled={isSaving}
+                      className="bg-blue-900/60 hover:bg-blue-800/70 text-white border-white/30 hover:border-white/50 px-10 py-3 rounded-xl text-base font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Cancelar
+                    </Button>
+                  )}
                   <Button
                     onClick={handleEdit}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-3 rounded-xl text-base font-medium shadow-lg transition-all"
+                    disabled={isSaving}
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-3 rounded-xl text-base font-medium shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Editar
+                    {isSaving ? "Salvando..." : isEditing ? "Salvar" : "Editar"}
                   </Button>
                 </div>
               </div>
