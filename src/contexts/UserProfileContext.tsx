@@ -2,10 +2,19 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useSession } from "next-auth/react";
 
+interface UserData {
+  nome_usuario: string;
+  email: string;
+  telefone: string;
+}
+
 interface UserProfileContextType {
   fotoPerfil: string | null;
   atualizarFotoPerfil: (novaFoto: string) => void;
   carregarFotoPerfil: () => Promise<void>;
+  dadosUsuario: UserData | null;
+  atualizarDadosUsuario: (novosDados: UserData) => void;
+  carregarDadosUsuario: () => Promise<void>;
 }
 
 const UserProfileContext = createContext<UserProfileContextType | undefined>(undefined);
@@ -13,6 +22,7 @@ const UserProfileContext = createContext<UserProfileContextType | undefined>(und
 export function UserProfileProvider({ children }: { children: ReactNode }) {
   const { data: session } = useSession();
   const [fotoPerfil, setFotoPerfil] = useState<string | null>(null);
+  const [dadosUsuario, setDadosUsuario] = useState<UserData | null>(null);
   
   const usuario = session?.user;
   const matricula = usuario?.matricula || "";
@@ -53,7 +63,40 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Carregar foto ao montar o componente
+  const carregarDadosUsuario = async () => {
+    if (!matricula || !usuario?.accesstoken) return;
+
+    try {
+      const response = await fetch(`${API_URL}/usuarios/${matricula}`, {
+        headers: {
+          Authorization: `Bearer ${usuario.accesstoken}`,
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const dados: UserData = {
+          nome_usuario: result.data.nome_usuario,
+          email: result.data.email,
+          telefone: result.data.telefone || '',
+        };
+        setDadosUsuario(dados);
+        // Salvar no localStorage para persistência
+        localStorage.setItem(`dados_usuario_${matricula}`, JSON.stringify(dados));
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados do usuário:", error);
+    }
+  };
+
+  const atualizarDadosUsuario = (novosDados: UserData) => {
+    setDadosUsuario(novosDados);
+    if (matricula) {
+      localStorage.setItem(`dados_usuario_${matricula}`, JSON.stringify(novosDados));
+    }
+  };
+
+  // Carregar foto e dados ao montar o componente
   useEffect(() => {
     if (matricula) {
       // Primeiro, tenta carregar do localStorage
@@ -61,13 +104,31 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
       if (fotoCache) {
         setFotoPerfil(fotoCache);
       }
+      
+      const dadosCache = localStorage.getItem(`dados_usuario_${matricula}`);
+      if (dadosCache) {
+        try {
+          setDadosUsuario(JSON.parse(dadosCache));
+        } catch (error) {
+          console.error("Erro ao parsear dados do cache:", error);
+        }
+      }
+      
       // Depois busca do servidor
       carregarFotoPerfil();
+      carregarDadosUsuario();
     }
   }, [matricula, usuario?.accesstoken]);
 
   return (
-    <UserProfileContext.Provider value={{ fotoPerfil, atualizarFotoPerfil, carregarFotoPerfil }}>
+    <UserProfileContext.Provider value={{ 
+      fotoPerfil, 
+      atualizarFotoPerfil, 
+      carregarFotoPerfil,
+      dadosUsuario,
+      atualizarDadosUsuario,
+      carregarDadosUsuario
+    }}>
       {children}
     </UserProfileContext.Provider>
   );
