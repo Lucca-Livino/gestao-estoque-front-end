@@ -18,17 +18,21 @@ export default function UserMenu() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-  const { fotoPerfil } = useUserProfile();
+  const { fotoPerfil, dadosUsuario } = useUserProfile();
 
-  const userName: string = session?.user?.nome_usuario || "Usuário";
+  const userName: string = dadosUsuario?.nome_usuario || session?.user?.nome_usuario || "Usuário";
   
-  // Gerar iniciais do nome para o fallback
   const userAbbreviation: string = userName
     .split(" ")
     .map((word) => word.charAt(0))
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+  const handleEditProfile = () => {
+    setOpen(false);
+    router.push("/perfil");
+  };
 
   const handleLogout = () => {
     setOpen(false);
@@ -58,7 +62,7 @@ export default function UserMenu() {
 
       <DropdownMenuContent className="flex flex-col gap-0.5 mt-2.5" align="end">
         <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-         <DropdownMenuItem>
+         <DropdownMenuItem onClick={handleEditProfile}>
           Editar perfil
         </DropdownMenuItem>
          <DropdownMenuItem onClick={handleLogout}>
