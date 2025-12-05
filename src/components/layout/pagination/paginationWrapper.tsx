@@ -22,6 +22,39 @@ export function CustomPagination({
   const prevDisabled = currentPage === 1;
   const nextDisabled = currentPage === totalPages;
 
+  const getVisiblePages = () => {
+    const delta = 1; 
+    const range = [];
+    const rangeWithDots = [];
+
+    range.push(1);
+
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
+    }
+
+    if (totalPages > 1) {
+      range.push(totalPages);
+    }
+
+    let l;
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
+  };
+
+  const visiblePages = getVisiblePages();
+
   return (
     <Pagination>
       <PaginationContent className="text-neutral-500">
@@ -40,11 +73,21 @@ export function CustomPagination({
             }}
           />
         </PaginationItem>
-        {Array.from({ length: totalPages }, (_, i) => {
-          const page = i + 1;
-          const active = page === currentPage;
+        
+        {visiblePages.map((page, index) => {
+          if (page === '...') {
+            return (
+              <PaginationItem key={`ellipsis-${index}`}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            );
+          }
+          
+          const pageNum = page as number;
+          const active = pageNum === currentPage;
+          
           return (
-            <PaginationItem key={page}>
+            <PaginationItem key={pageNum}>
               <PaginationLink
                 href="#"
                 className={`
@@ -57,14 +100,15 @@ export function CustomPagination({
                 aria-current={active ? "page" : undefined}
                 onClick={(e: any) => {
                   e.preventDefault();
-                  if (!active) onPageChange(page);
+                  if (!active) onPageChange(pageNum);
                 }}
               >
-                {page}
+                {pageNum}
               </PaginationLink>
             </PaginationItem>
           );
         })}
+
         <PaginationNext
           data-test="btn-proxima-pagina"
           className={`w-1 ${

@@ -231,13 +231,12 @@ export function CategoriaPage({
       <>
         <Header />
         <main className="flex-1 overflow-y-auto bg-white">
-          <div className="container mx-auto p-6">
+          <div className="container mx-auto px-6 py-8">
             <div className="flex items-center justify-center min-h-[400px]">
               <LoaderIcon className="w-8 h-8 animate-spin text-blue-600" />
             </div>
           </div>
         </main>
-        <Footer />
       </>
     );
   }
@@ -246,8 +245,8 @@ export function CategoriaPage({
     <>
       <Header />
       <main className="flex-1 overflow-y-auto bg-white">
-        <div className="container mx-auto p-6">
-          <div className="flex items-center gap-4 mb-6">
+        <div className="container mx-auto px-6 py-10">
+          <div className="flex items-center gap-4 mb-8">
             <Button
               variant="outline"
               size="icon"
@@ -259,25 +258,29 @@ export function CategoriaPage({
             <h1 className="text-3xl font-bold text-gray-900">{titulo}</h1>
           </div>
 
-          <CategoriaStatsCards
-            totalProdutos={totalProdutos}
-            totalEntradas={totalEntradas}
-            totalSaidas={totalSaidas}
-            corEntrada={corEntrada}
-            corSaida={corSaida}
-          />
+          <div className="mb-8">
+            <CategoriaStatsCards
+              totalProdutos={totalProdutos}
+              totalEntradas={totalEntradas}
+              totalSaidas={totalSaidas}
+              corEntrada={corEntrada}
+              corSaida={corSaida}
+            />
+          </div>
 
-          <CategoriaChart
-            data={chartData}
-            titulo={`Movimentações de Produtos - Categoria ${categoria}`}
-            descricao="Entradas e saídas dos últimos meses"
-            corEntrada={corEntrada}
-            corSaida={corSaida}
-            categoria={categoria}
-          />
+          <div className="mb-8">
+            <CategoriaChart
+              data={chartData}
+              titulo={`Movimentações de Produtos - Categoria ${categoria}`}
+              descricao="Entradas e saídas dos últimos meses"
+              corEntrada={corEntrada}
+              corSaida={corSaida}
+              categoria={categoria}
+            />
+          </div>
 
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
               Lista de Produtos
             </h2>
             <TabelaCategoriaProdutos produtos={produtosFormatados} />
