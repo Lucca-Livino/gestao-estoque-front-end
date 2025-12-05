@@ -7,11 +7,61 @@ import {
 } from "@/types/Dashboard";
 import { getAllowedRoutes } from "@/lib/permissions";
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { fetchData } from "@/services/api";
+import { Movimentacao } from "@/types/Movimentacao";
 
 export default function DashboardNavigation() {
   const { data: session } = useSession();
   const userRole = session?.user?.perfil;
   const allowedRoutes = getAllowedRoutes(userRole);
+  const [totalSaidas, setTotalSaidas] = useState("R$ 0,00");
+
+  useEffect(() => {
+    const calcularTotalSaidas = async () => {
+      try {
+        const token = session?.user?.accesstoken;
+        if (!token) return;
+
+        const response = await fetchData<{ 
+          data?: { docs: Movimentacao[] };
+          docs?: Movimentacao[];
+        }>(
+          "/movimentacoes?tipo=saida",
+          "GET",
+          token
+        );
+
+        const movimentacoes = response.data?.docs || response.docs || [];
+        
+        const total = movimentacoes.reduce((acc, mov) => {
+          if (mov.tipo === "saida") {
+            const totalMovimentacao = mov.produtos.reduce(
+              (sum, produto) => sum + (produto.preco * produto.quantidade_produtos),
+              0
+            );
+            return acc + totalMovimentacao;
+          }
+          return acc;
+        }, 0);
+
+        setTotalSaidas(
+          new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(total)
+        );
+      } catch (error) {
+        console.error("Erro ao calcular total de saídas:", error);
+        setTotalSaidas("R$ 0,00");
+      }
+    };
+
+    if (session?.user?.accesstoken) {
+      calcularTotalSaidas();
+    }
+  }, [session]);
+
   const statCards: StatCardType[] = [
     {
       id: "categoria-a",
@@ -34,7 +84,7 @@ export default function DashboardNavigation() {
     {
       id: "saidas",
       title: "Saídas",
-      value: "R$120.000,00",
+      value: totalSaidas,
       icon: FileText,
     },
   ];
