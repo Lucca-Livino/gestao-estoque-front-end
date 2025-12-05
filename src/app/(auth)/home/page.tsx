@@ -11,20 +11,24 @@ export default function Home() {
 
   return (
     <div>
-      <main className="min-h-screen bg-linear-to-br from-[#0042D9] via-[#0042D9]/90 to-[#0042D9]/70 p-6 flex flex-col">
-        <div className="max-w-7xl mx-auto w-full flex flex-col flex-1">
-          <div className="flex items-center justify-between mb-6 cursor-pointer">
-            <h1
-              className="text-xl font-bold text-white"
-              onClick={() => (window.location.href = "/home")}
-            >
-              Gestão de Estoque
-            </h1>
-            <UserMenu />
+      <main className="min-h-screen bg-white flex flex-col">
+        <div className="h-18 flex p-4 bg-linear-to-r from-blue-600 to-blue-500 transition-opacity ease-in-out duration-initial backdrop-opacity-95 text-white">
+          <div className="max-w-7xl mx-auto w-full">
+            <div className="flex items-center justify-between cursor-pointer">
+              <h1
+                className="text-xl font-bold text-white"
+                onClick={() => (window.location.href = "/home")}
+              >
+                Gestão de Estoque
+              </h1>
+              <UserMenu />
+            </div>
           </div>
+        </div>
 
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 p-6">
+          <div className="flex-1 flex flex-col justify-center py-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {statCards.map((card) => (
                 <StatCard key={card.id} card={card} />
               ))}
