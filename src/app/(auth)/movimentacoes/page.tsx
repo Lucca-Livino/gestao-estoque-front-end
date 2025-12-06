@@ -221,34 +221,38 @@ export default function MovimentacoesPage() {
       <main className="min-h-screen p-8">
         <TypographyH2>Estoque de movimentações</TypographyH2>
 
-        <div className="flex flex-row place-content-between pb-2 mb-2">
-          <MovimentacoesFilter
-            movimentacao={movimentacao}
-            setMovimentacao={setMovimentacao}
-            produtos={produtos}
-            setProdutos={setProdutos}
-            tipoProduto={tipoProduto}
-            setTipoProduto={setTipoProduto}
-            dataInicial={dataInicial}
-            setDataInicial={setDataInicial}
-            dataFinal={dataFinal}
-            setDataFinal={setDataFinal}
-            onSubmit={() => {
-              setMovimentacaoFilter(movimentacao);
-              setProdutosFilter(produtos);
-              setTipoProdutoFilter(tipoProduto);
-              setDataInicialFilter(dataInicial);
-              setDataFinalFilter(dataFinal);
-              setPage(1);
-            }}
-            onClear={resetFilters}
-          />
-          <CadastroMovimentacao
-            color="green"
-            size="1/8"
-            open={cadastroOpen}
-            onOpenChange={(value) => setCadastroOpen(value)}
-          />
+        <div className="flex flex-col sm:flex-row sm:place-content-between pb-2 mb-2 gap-4">
+          <div className="order-2 sm:order-1 w-full">
+            <MovimentacoesFilter
+              movimentacao={movimentacao}
+              setMovimentacao={setMovimentacao}
+              produtos={produtos}
+              setProdutos={setProdutos}
+              tipoProduto={tipoProduto}
+              setTipoProduto={setTipoProduto}
+              dataInicial={dataInicial}
+              setDataInicial={setDataInicial}
+              dataFinal={dataFinal}
+              setDataFinal={setDataFinal}
+              onSubmit={() => {
+                setMovimentacaoFilter(movimentacao);
+                setProdutosFilter(produtos);
+                setTipoProdutoFilter(tipoProduto);
+                setDataInicialFilter(dataInicial);
+                setDataFinalFilter(dataFinal);
+                setPage(1);
+              }}
+              onClear={resetFilters}
+            />
+          </div>
+          <div className="order-1 sm:order-2 flex justify-start sm:justify-end">
+            <CadastroMovimentacao
+              color="green"
+              size="1/8"
+              open={cadastroOpen}
+              onOpenChange={(value) => setCadastroOpen(value)}
+            />
+          </div>
         </div>
 
         {movimentacoesIsLoading && (

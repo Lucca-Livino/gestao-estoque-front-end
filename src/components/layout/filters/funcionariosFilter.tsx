@@ -43,7 +43,7 @@ export function FuncionariosFilter({
   }, [perfil, status]);
 
   return (
-    <div className="mb-4 flex flex-row gap-4">
+    <div className="mb-4 flex flex-col sm:flex-row gap-4">
       <InputGroup className="w-[360px]">
         <InputGroupInput
           data-test="input-busca-funcionario"
@@ -70,7 +70,7 @@ export function FuncionariosFilter({
           onSubmit;
         }}
       >
-        <SelectTrigger className="w-[120px]" data-test="select-perfil-filtro">
+        <SelectTrigger className="w-full sm:w-[120px]" data-test="select-perfil-filtro">
           <SelectValue placeholder="Perfil" />
         </SelectTrigger>
         <SelectContent>
@@ -91,7 +91,7 @@ export function FuncionariosFilter({
           onSubmit;
         }}
       >
-        <SelectTrigger className="w-[120px]" data-test="select-status-filtro">
+        <SelectTrigger className="w-full sm:w-[120px]" data-test="select-status-filtro">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
