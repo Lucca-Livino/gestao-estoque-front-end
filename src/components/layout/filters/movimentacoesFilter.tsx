@@ -64,7 +64,7 @@ function CalendarPicker({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={`w-[180px] justify-between font-normal cursor-pointer ${
+          className={`w-full sm:w-[180px] justify-between font-normal cursor-pointer ${
             !selectedDate ? "text-muted-foreground" : ""
           }`}
           data-test={dataTest}
@@ -104,6 +104,19 @@ export function MovimentacoesFilter({
   onSubmit,
   onClear,
 }: MovimentacaoFilterProps) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     if (onSubmit) {
       onSubmit();
@@ -111,10 +124,10 @@ export function MovimentacoesFilter({
   }, [tipoProduto, dataFinal]);
 
   return (
-    <div className="mb-4 flex flex-row gap-4">
-      <InputGroup className="w-[420px]">
+    <div className="mb-4 flex flex-col sm:flex-row gap-4 flex-wrap">
+      <InputGroup className="w-full sm:w-[420px]">
         <InputGroupInput
-          placeholder="Buscar por produto, usuário, destino ou observação"
+          placeholder={isMobile ? "Buscar por produto, usuário..." : "Buscar por produto, usuário, destino ou observação"}
           value={movimentacao}
           onChange={(e) => setMovimentacao(e.target.value)}
           onKeyDown={(e) => {
@@ -138,7 +151,7 @@ export function MovimentacoesFilter({
         }}
         data-test="select-tipo-movimentacao"
       >
-        <SelectTrigger className="w-[120px] cursor-pointer" data-test="select-tipo-movimentacao">
+        <SelectTrigger className="w-full sm:w-[120px] cursor-pointer" data-test="select-tipo-movimentacao">
           <SelectValue placeholder="Tipo" />
         </SelectTrigger>
         <SelectContent>
@@ -156,8 +169,8 @@ export function MovimentacoesFilter({
         </SelectContent>
       </Select>
 
-      <div className="flex flex-row items-center gap-1">
-        <CalendarDays className="text-muted-foreground" />
+      <div className="flex flex-row items-center gap-1 w-full sm:w-auto">
+        <CalendarDays className="text-muted-foreground hidden sm:block" />
         <CalendarPicker
           placeholder="Data Inicial"
           selectedDate={
@@ -186,12 +199,12 @@ export function MovimentacoesFilter({
         />
       </div>
 
-      <div className="flex flex-row items-center">
+      <div className="hidden sm:flex flex-row items-center">
         <ArrowRightLeft className="text-muted-foreground w-4 h-4" />
       </div>
 
-      <div className="flex flex-row items-center gap-1">
-        <CalendarDays className="text-muted-foreground" />
+      <div className="flex flex-row items-center gap-1 w-full sm:w-auto">
+        <CalendarDays className="text-muted-foreground hidden sm:block" />
         <CalendarPicker
           placeholder="Data Final"
           selectedDate={

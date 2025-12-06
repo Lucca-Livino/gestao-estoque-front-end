@@ -170,36 +170,39 @@ export default function FuncionariosPage() {
       <main className="min-h-screen p-8">
         <TypographyH2>Gestão de funcionários</TypographyH2>
 
-        <div className="flex flex-row place-content-between pb-2 mb-2">
-          <FuncionariosFilter
-            usuario={usuarioFilter}
-            setUsuario={(value) => {
-              setUsuarioFilter(value);
-              setPage(1);
-            }}
-            perfil={perfilFilter}
-            setPerfil={(value) => {
-              setPerfilFilter(value);
-              setPage(1);
-            }}
-            status={statusFilter}
-            setStatus={(value) => {
-              setStatusFilter(value);
-              setPage(1);
-            }}
-            onSubmit={() => {
-              // A busca será disparada automaticamente pela mudança nos query states
-            }}
-            onClear={() => resetFilters()}
-          />
-          <div className="flex-1"></div>
-          {canModify && (
-            <CadastroFuncionario
-              color="green"
-              size="1/8"
-              open={cadastroOpen}
-              onOpenChange={(value) => setCadastroOpen(value)}
+        <div className="flex flex-col sm:flex-row sm:place-content-between pb-2 mb-2 gap-4">
+          <div className="order-2 sm:order-1 w-full">
+            <FuncionariosFilter
+              usuario={usuarioFilter}
+              setUsuario={(value) => {
+                setUsuarioFilter(value);
+                setPage(1);
+              }}
+              perfil={perfilFilter}
+              setPerfil={(value) => {
+                setPerfilFilter(value);
+                setPage(1);
+              }}
+              status={statusFilter}
+              setStatus={(value) => {
+                setStatusFilter(value);
+                setPage(1);
+              }}
+              onSubmit={() => {
+                // A busca será disparada automaticamente pela mudança nos query states
+              }}
+              onClear={() => resetFilters()}
             />
+          </div>
+          {canModify && (
+            <div className="order-1 sm:order-2 flex justify-start sm:justify-end">
+              <CadastroFuncionario
+                color="green"
+                size="1/8"
+                open={cadastroOpen}
+                onOpenChange={(value) => setCadastroOpen(value)}
+              />
+            </div>
           )}
         </div>
 

@@ -23,55 +23,46 @@ export function CustomPagination({
   const prevDisabled = currentPage === 1;
   const nextDisabled = currentPage === totalPages;
 
-  const getPageNumbers = () => {
-    const pages: (number | 'ellipsis-start' | 'ellipsis-end')[] = [];
-    
-    if (totalPages <= 3) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+  const getVisiblePages = () => {
+    const delta = 1; 
+    const range = [];
+    const rangeWithDots = [];
+
+    range.push(1);
+
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
     }
 
-    // Determina quais 3 páginas mostrar baseado na página atual
-    let start: number;
-    let end: number;
-
-    if (currentPage === 1) {
-      start = 1;
-      end = 3;
-    } else if (currentPage === totalPages) {
-      start = totalPages - 2;
-      end = totalPages;
-    } else {
-      start = currentPage - 1;
-      end = currentPage + 1;
+    if (totalPages > 1) {
+      range.push(totalPages);
     }
 
-    // Adiciona elipse no início se necessário
-    if (start > 1) {
-      pages.push('ellipsis-start');
+    let l;
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
     }
 
-    // Adiciona as 3 páginas
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
-    // Adiciona elipse no fim se necessário
-    if (end < totalPages) {
-      pages.push('ellipsis-end');
-    }
-
-    return pages;
+    return rangeWithDots;
   };
 
-  const pageNumbers = getPageNumbers();
+  const visiblePages = getVisiblePages();
 
   return (
     <Pagination>
-      <PaginationContent className="text-neutral-500">
+      <PaginationContent className="text-neutral-500 flex-wrap gap-1">
         <PaginationItem>
           <PaginationPrevious
             data-test="btn-pagina-anterior"
-            className={`w-1 ${
+            className={`w-auto px-3 ${
               prevDisabled
                 ? "opacity-50 pointer-events-none"
                 : "bg-muted/50 hover:bg-blue-100"
@@ -84,20 +75,20 @@ export function CustomPagination({
           />
         </PaginationItem>
         
-        {pageNumbers.map((item, index) => {
-          if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+        {visiblePages.map((page, index) => {
+          if (page === '...') {
             return (
               <PaginationItem key={`ellipsis-${index}`}>
                 <PaginationEllipsis />
               </PaginationItem>
             );
           }
-
-          const page = item as number;
-          const active = page === currentPage;
+          
+          const pageNum = page as number;
+          const active = pageNum === currentPage;
           
           return (
-            <PaginationItem key={page}>
+            <PaginationItem key={pageNum}>
               <PaginationLink
                 href="#"
                 className={`
@@ -110,40 +101,30 @@ export function CustomPagination({
                 aria-current={active ? "page" : undefined}
                 onClick={(e: any) => {
                   e.preventDefault();
-                  if (!active) onPageChange(page);
+                  if (!active) onPageChange(pageNum);
                 }}
               >
-                {page}
+                {pageNum}
               </PaginationLink>
             </PaginationItem>
           );
         })}
 
-        {nextDisabled ? (
-          <PaginationItem>
-            <PaginationLink
-              href="#"
-              size="icon"
-              className="bg-muted/50 hover:bg-blue-100 text-neutral-500"
-              onClick={(e: any) => {
-                e.preventDefault();
-                onPageChange(1);
-              }}
-            >
-              <RotateCcw className="h-4 w-4" />
-            </PaginationLink>
-          </PaginationItem>
-        ) : (
+        <PaginationItem>
           <PaginationNext
             data-test="btn-proxima-pagina"
-            className="w-1 bg-muted/50 hover:bg-blue-100"
+            className={`w-auto px-3 ${
+              nextDisabled
+                ? "opacity-50 pointer-events-none"
+                : "bg-muted/50 hover:bg-blue-100"
+            }`}
             href="#"
             onClick={(e: any) => {
               e.preventDefault();
-              onPageChange(currentPage + 1);
+              if (!nextDisabled) onPageChange(currentPage + 1);
             }}
           />
-        )}
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   );

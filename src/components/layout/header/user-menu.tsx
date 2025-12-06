@@ -42,18 +42,18 @@ export default function UserMenu() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center space-x-3 cursor-pointer">
-          <div className="text-right">
+        <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer">
+          <div className="text-right hidden sm:block">
             <h5 className="text-sm font-medium text-white mr-1.5">{userName}</h5>
           </div>
 
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
             <AvatarImage src={fotoPerfil || "/foto-perfil.jpeg"} alt="User Avatar" />
             <AvatarFallback className="text-blue-700">{userAbbreviation}</AvatarFallback>
           </Avatar>
 
           <ChevronDown
-            className={`w-4 h-4 text-white transition-transform duration-200 ${
+            className={`w-4 h-4 text-white transition-transform duration-200 hidden sm:block ${
               open ? "rotate-180" : ""
             } aria-hidden`}
           />

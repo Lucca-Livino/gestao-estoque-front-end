@@ -14,7 +14,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("flex justify-center", className)}
+      className={cn("flex justify-center overflow-x-auto w-full", className)}
       {...props}
     />
   )
@@ -27,7 +27,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cn("flex flex-row items-center gap-0.5 sm:gap-1 flex-nowrap", className)}
       {...props}
     />
   )
@@ -58,6 +58,7 @@ function PaginationLink({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
+        "text-xs sm:text-sm min-w-[28px] max-w-[28px] h-8 sm:min-w-[36px] sm:max-w-[36px] sm:h-9 flex-shrink-0",
         className
       )}
       {...props}
@@ -73,10 +74,10 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn("gap-1 px-2 sm:px-2.5 sm:pl-2.5 flex-shrink-0", className)}
       {...props}
     >
-      <ChevronLeftIcon />
+      <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
       <span className="hidden sm:block"></span>
     </PaginationLink>
   )
@@ -90,11 +91,11 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn("gap-1 px-2 sm:px-2.5 sm:pr-2.5 flex-shrink-0", className)}
       {...props}
     >
       <span className="hidden sm:block"></span>
-      <ChevronRightIcon />
+      <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
     </PaginationLink>
   )
 }
@@ -107,10 +108,10 @@ function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn("flex size-8 sm:size-9 items-center justify-center flex-shrink-0", className)}
       {...props}
     >
-      <MoreHorizontalIcon className="size-4" />
+      <MoreHorizontalIcon className="size-3 sm:size-4" />
       <span className="sr-only">More pages</span>
     </span>
   )

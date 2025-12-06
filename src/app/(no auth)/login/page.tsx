@@ -88,7 +88,7 @@ export default function Login() {
     <div>
       <main className="min-h-screen bg-white p-6 flex flex-col relative overflow-hidden">
         <div className="flex items-center space-x-3">
-          <h1 className="text-xl font-bold">Gestão de Estoque</h1>
+          <h1 className="text-xl font-bold">GarageHub</h1>
         </div>
 
         <div

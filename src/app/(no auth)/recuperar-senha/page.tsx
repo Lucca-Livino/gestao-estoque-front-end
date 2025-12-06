@@ -52,7 +52,7 @@ export default function RecuperarSenhaPage() {
       <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 relative z-10">
 
         <div className="flex items-center space-x-3">
-          <h1 className="text-xl font-bold">Gestão de Estoque</h1>
+          <h1 className="text-xl font-bold">GarageHub</h1>
         </div>
 
         <div className="flex-1 flex flex-col justify-center">
