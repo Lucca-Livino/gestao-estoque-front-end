@@ -18,6 +18,7 @@ export default function Home() {
               <h1
                 className="text-xl font-bold text-white"
                 onClick={() => (window.location.href = "/home")}
+                data-test="titulo-gestao-estoque"
               >
                 Gestão de Estoque
               </h1>
@@ -28,13 +29,13 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 p-6">
           <div className="flex-1 flex flex-col justify-center py-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-test="stats-cards-container">
               {statCards.map((card) => (
                 <StatCard key={card.id} card={card} />
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" data-test="module-cards-container">
               {moduleCards.map((card) => (
                 <ModuleCard key={card.id} card={card} />
               ))}
