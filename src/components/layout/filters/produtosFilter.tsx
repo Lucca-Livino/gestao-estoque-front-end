@@ -48,7 +48,7 @@ export function ProdutosFilter({
   }, [categoria, estoqueBaixo]);
 
   return (
-    <div className="mb-4 flex flex-row gap-4">
+    <div className="mb-4 flex flex-col sm:flex-row gap-4">
       <InputGroup className="w-[360px]">
         <InputGroupInput
           data-test="input-busca-produto"
@@ -75,7 +75,7 @@ export function ProdutosFilter({
           onSubmit;
         }}
       >
-        <SelectTrigger data-test="select-categoria" className="w-[120px]">
+        <SelectTrigger data-test="select-categoria" className="w-full sm:w-[120px]">
           <SelectValue placeholder="Categoria" />
         </SelectTrigger>
         <SelectContent>

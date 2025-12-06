@@ -126,39 +126,43 @@ export default function FornecedoresPage() {
       <main className="min-h-screen p-8" data-test="pagina-fornecedores">
         <TypographyH2>Gestão de Fornecedores</TypographyH2>
 
-        <div className="flex flex-row place-content-between pb-2 mb-2">
-          <FornecedoresFilter
-            nomeFornecedor={nomeFornecedor}
-            setNomeFornecedor={setNomeFornecedor}
-            ativo={ativo}
-            setAtivo={setAtivo}
-            onSubmit={() => {
-              setPage(1);
-              setNome_fornecedorFilter(nomeFornecedor);
-              setAtivoFilter(
-                ativo === null ? "todos" : ativo === true ? "true" : "false"
-              );
-            }}
-            onClear={resetFilters}
-            onStatusChange={(newStatus) => {
-              setAtivo(newStatus);
-              setPage(1);
-              setAtivoFilter(
-                newStatus === null
-                  ? "todos"
-                  : newStatus === true
-                  ? "true"
-                  : "false"
-              );
-            }}
-          />
-          {canModify && (
-            <FornecedorCadastro
-              color="green"
-              size="1/8"
-              open={cadastroOpen}
-              onOpenChange={(value) => setCadastroOpen(value)}
+        <div className="flex flex-col sm:flex-row sm:place-content-between pb-2 mb-2 gap-4">
+          <div className="order-2 sm:order-1 w-full">
+            <FornecedoresFilter
+              nomeFornecedor={nomeFornecedor}
+              setNomeFornecedor={setNomeFornecedor}
+              ativo={ativo}
+              setAtivo={setAtivo}
+              onSubmit={() => {
+                setPage(1);
+                setNome_fornecedorFilter(nomeFornecedor);
+                setAtivoFilter(
+                  ativo === null ? "todos" : ativo === true ? "true" : "false"
+                );
+              }}
+              onClear={resetFilters}
+              onStatusChange={(newStatus) => {
+                setAtivo(newStatus);
+                setPage(1);
+                setAtivoFilter(
+                  newStatus === null
+                    ? "todos"
+                    : newStatus === true
+                    ? "true"
+                    : "false"
+                );
+              }}
             />
+          </div>
+          {canModify && (
+            <div className="order-1 sm:order-2 flex justify-start sm:justify-end">
+              <FornecedorCadastro
+                color="green"
+                size="1/8"
+                open={cadastroOpen}
+                onOpenChange={(value) => setCadastroOpen(value)}
+              />
+            </div>
           )}
         </div>
 

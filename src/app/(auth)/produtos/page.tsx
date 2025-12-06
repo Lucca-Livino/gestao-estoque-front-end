@@ -137,28 +137,32 @@ export default function ProdutosPage() {
       <main className="min-h-screen p-8">
         <TypographyH2>Estoque de produtos</TypographyH2>
 
-        <div className="flex flex-row place-content-between pb-2 mb-2">
-          <ProdutosFilter
-            produto={produto}
-            setProduto={setProduto}
-            categoria={categoria}
-            setCategoria={setCategoria}
-            estoqueBaixo={estoqueBaixo}
-            setEstoqueBaixo={setEstoqueBaixo}
-            onSubmit={() => {
-              setProdutoFilter(produto);
-              setCategoriaFilter(categoria);
-              setEstoqueBaixoFilter(estoqueBaixo);
-              setPage(1);
-            }}
-            onClear={resetFilters}
-          />
-          <CadastroProduto
-            color="green"
-            size="1/8"
-            open={cadastroOpen}
-            onOpenChange={(value) => setCadastroOpen(value)}
-          />
+        <div className="flex flex-col sm:flex-row sm:place-content-between pb-2 mb-2 gap-4">
+          <div className="order-2 sm:order-1 w-full">
+            <ProdutosFilter
+              produto={produto}
+              setProduto={setProduto}
+              categoria={categoria}
+              setCategoria={setCategoria}
+              estoqueBaixo={estoqueBaixo}
+              setEstoqueBaixo={setEstoqueBaixo}
+              onSubmit={() => {
+                setProdutoFilter(produto);
+                setCategoriaFilter(categoria);
+                setEstoqueBaixoFilter(estoqueBaixo);
+                setPage(1);
+              }}
+              onClear={resetFilters}
+            />
+          </div>
+          <div className="order-1 sm:order-2 flex justify-start sm:justify-end">
+            <CadastroProduto
+              color="green"
+              size="1/8"
+              open={cadastroOpen}
+              onOpenChange={(value) => setCadastroOpen(value)}
+            />
+          </div>
         </div>
 
         {produtosIsLoading && (

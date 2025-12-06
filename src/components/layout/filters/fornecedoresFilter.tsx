@@ -37,7 +37,7 @@ export function FornecedoresFilter({
   onStatusChange,
 }: FornecedoresFilterProps) {
   return (
-    <div className="mb-4 flex flex-row gap-4" data-test="filtro-fornecedores">
+    <div className="mb-4 flex flex-col sm:flex-row gap-4" data-test="filtro-fornecedores">
       <InputGroup className="w-100" data-test="input-busca-fornecedor">
         <InputGroupInput
           placeholder="Buscar por nome ou CNPJ"
@@ -63,7 +63,7 @@ export function FornecedoresFilter({
           onStatusChange?.(novo);
         }}
       >
-        <SelectTrigger className="w-[120px]" data-test="select-status-fornecedor">
+        <SelectTrigger className="w-full sm:w-[120px]" data-test="select-status-fornecedor">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
