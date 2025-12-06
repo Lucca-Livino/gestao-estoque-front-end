@@ -7,7 +7,7 @@ export default function Header() {
       <div className="w-full flex justify-center">
         <div className="flex place-content-between w-full px-4 items-center">
             <div className="flex items-center space-x-3">
-                <h1 className="text-lg sm:text-xl font-bold cursor-pointer" onClick={() => window.location.href = "/home"}>Gestão de Estoque</h1>
+                <h1 className="text-lg sm:text-xl font-bold cursor-pointer" onClick={() => window.location.href = "/home"}>GarageHub</h1>
             </div>
             <div className="flex items-center space-x-3">
                 <Navigation />

@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="flex px-4">
           <div className="flex items-center">
             <p className="text-xs">
-              Gestão de estoque - H&R - ADS 2025/2 © Todos direitos reservados.
+              GarageHub - H&R - ADS 2025/4 © 
             </p>
             {/* TODO: implementar links de redes sociais */}
           </div>

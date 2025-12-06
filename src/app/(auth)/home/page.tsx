@@ -18,7 +18,7 @@ export default function Home() {
               className="text-xl font-bold text-white"
               onClick={() => (window.location.href = "/home")}
             >
-              Gestão de Estoque
+              GarageHub
             </h1>
             <UserMenu />
           </div>
