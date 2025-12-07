@@ -38,7 +38,7 @@ Cypress.Commands.add("login", (matricula: string, senha: string) => {
   cy.clearCookies();
   cy.clearLocalStorage();
 
-  cy.visit("http://localhost:3000/");
+  cy.visit("https://garagehub.app.fslab.dev/login");
 
   cy.get('input[type="text"]', { timeout: 10000 })
     .should("be.visible")

@@ -1,6 +1,6 @@
 describe("Login Page", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/login");
+    cy.visit("https://garagehub.app.fslab.dev/login");
   });
 
   it("Deve mostrar o formulário de login", () => {
