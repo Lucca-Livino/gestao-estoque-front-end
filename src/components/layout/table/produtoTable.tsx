@@ -155,40 +155,40 @@ export default function TabelaProdutos({
         produto={editProduct}
       />
 
-      <div className="flex justify-between">
-        <div className="px-4 py-6 flex items-center justify-between w-full">
-          <ItemsPerPage
-            perPage={perPageState ?? perPage}
-            setPerPage={(value) => {
-              setPerPageState(value);
-              setPageState(1);
-            }}
-            totalItems={Number(totalDocs)}
-            tableData={produtos}
-            tableTitle="Relatório de Produtos"
-            tableColumns={[
-              { key: "nome_produto", label: "Nome do Produto" },
-              { key: "codigo_produto", label: "Código" },
-              { key: "categoria", label: "Categoria" },
-              {
-                key: "custo",
-                label: "Custo unitário",
-                format: (value) => AdjustPrice(value),
-              },
-              {
-                key: "preco",
-                label: "Preço unitário",
-                format: (value) => AdjustPrice(value),
-              },
-              { key: "estoque", label: "Estoque" },
-              {
-                key: "data_ultima_atualizacao",
-                label: "Última atualização",
-                format: (value) => AdjustDate(value),
-              },
-            ]}
-          />
+      <div className="px-4 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <ItemsPerPage
+          perPage={perPageState ?? perPage}
+          setPerPage={(value) => {
+            setPerPageState(value);
+            setPageState(1);
+          }}
+          totalItems={Number(totalDocs)}
+          tableData={produtos}
+          tableTitle="Relatório de Produtos"
+          tableColumns={[
+            { key: "nome_produto", label: "Nome do Produto" },
+            { key: "codigo_produto", label: "Código" },
+            { key: "categoria", label: "Categoria" },
+            {
+              key: "custo",
+              label: "Custo unitário",
+              format: (value) => AdjustPrice(value),
+            },
+            {
+              key: "preco",
+              label: "Preço unitário",
+              format: (value) => AdjustPrice(value),
+            },
+            { key: "estoque", label: "Estoque" },
+            {
+              key: "data_ultima_atualizacao",
+              label: "Última atualização",
+              format: (value) => AdjustDate(value),
+            },
+          ]}
+        />
 
+        <div className="flex justify-center lg:justify-end">
           <CustomPagination
             totalPages={totalPages}
             currentPage={currentPage ?? 1}

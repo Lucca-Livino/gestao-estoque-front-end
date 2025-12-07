@@ -137,45 +137,45 @@ export default function TabelaFornecedores({
         fornecedor={editFornecedor}
       />
 
-      <div className="flex justify-between">
-        <div className="px-4 py-6 flex items-center justify-between w-full">
-          <ItemsPerPage
-            perPage={perPageState ?? perPage}
-            setPerPage={(value) => {
-              setPerPageState(value);
-              setPageState(1);
-            }}
-            totalItems={Number(totalDocs)}
-            tableData={fornecedores}
-            tableTitle="Relatório de Fornecedores"
-            tableColumns={[
-              { key: "nome_fornecedor", label: "Nome do Fornecedor" },
-              { key: "cnpj", label: "CNPJ" },
-              { key: "telefone", label: "Telefone" },
-              { key: "email", label: "Email" },
-              {
-                key: "status",
-                label: "Status",
-                format: (value) => (value ? "Ativo" : "Inativo"),
+      <div className="px-4 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <ItemsPerPage
+          perPage={perPageState ?? perPage}
+          setPerPage={(value) => {
+            setPerPageState(value);
+            setPageState(1);
+          }}
+          totalItems={Number(totalDocs)}
+          tableData={fornecedores}
+          tableTitle="Relatório de Fornecedores"
+          tableColumns={[
+            { key: "nome_fornecedor", label: "Nome do Fornecedor" },
+            { key: "cnpj", label: "CNPJ" },
+            { key: "telefone", label: "Telefone" },
+            { key: "email", label: "Email" },
+            {
+              key: "status",
+              label: "Status",
+              format: (value) => (value ? "Ativo" : "Inativo"),
+            },
+            {
+              key: "endereco",
+              label: "Cidade/UF",
+              format: (value) => {
+                const endereco = value?.[0];
+                return endereco
+                  ? `${endereco.cidade}/${endereco.estado}`
+                  : "-";
               },
-              {
-                key: "endereco",
-                label: "Cidade/UF",
-                format: (value) => {
-                  const endereco = value?.[0];
-                  return endereco
-                    ? `${endereco.cidade}/${endereco.estado}`
-                    : "-";
-                },
-              },
-              {
-                key: "data_cadastro",
-                label: "Data de cadastro",
-                format: (value) => (value ? AdjustDate(value) : "-"),
-              },
-            ]}
-          />
+            },
+            {
+              key: "data_cadastro",
+              label: "Data de cadastro",
+              format: (value) => (value ? AdjustDate(value) : "-"),
+            },
+          ]}
+        />
 
+        <div className="flex justify-center lg:justify-end">
           <CustomPagination
             totalPages={totalPages}
             currentPage={currentPage ?? 1}

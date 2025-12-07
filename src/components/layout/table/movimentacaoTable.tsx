@@ -152,9 +152,8 @@ export default function TabelaMovimentacao({
         </TooltipProvider>
       </div>
 
-      <div className="flex justify-between">
-        <div className="px-4 py-6 flex items-center justify-between w-full">
-          <ItemsPerPage
+      <div className="px-4 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <ItemsPerPage
             perPage={perPageState ?? perPage}
             setPerPage={(value) => {
               setPerPageState(value);
@@ -226,6 +225,7 @@ export default function TabelaMovimentacao({
             ]}
           />
 
+        <div className="flex justify-center lg:justify-end">
           <CustomPagination
             totalPages={totalPages}
             currentPage={currentPage ?? 1}

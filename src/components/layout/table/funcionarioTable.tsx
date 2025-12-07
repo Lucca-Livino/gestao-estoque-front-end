@@ -143,41 +143,41 @@ export default function TabelaFuncionarios({
         funcionario={editFuncionario}
       />
 
-      <div className="flex justify-between">
-        <div className="px-4 py-6 flex items-center justify-between w-full">
-          <ItemsPerPage
-            perPage={perPageState ?? perPage}
-            setPerPage={(value) => {
-              setPerPageState(value);
-              setPageState(1);
-            }}
-            totalItems={Number(totalDocs)}
-            tableData={funcionarios}
-            tableTitle="Relatório de Funcionários"
-            tableColumns={[
-              { key: "nome_usuario", label: "Nome do Funcionário" },
-              { key: "matricula", label: "Matrícula" },
-              { key: "email", label: "Email" },
-              { key: "perfil", label: "Perfil" },
-              { key: "telefone", label: "Telefone" },
-              {
-                key: "ativo",
-                label: "Status",
-                format: (value) => (value ? "Ativo" : "Inativo"),
-              },
-              {
-                key: "data_cadastro",
-                label: "Data de cadastro",
-                format: (value) => (value ? AdjustDate(value) : "-"),
-              },
-              {
-                key: "data_ultima_atualizacao",
-                label: "Data de última atualização",
-                format: (value) => (value ? AdjustDate(value) : "-"),
-              },
-            ]}
-          />
+      <div className="px-4 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <ItemsPerPage
+          perPage={perPageState ?? perPage}
+          setPerPage={(value) => {
+            setPerPageState(value);
+            setPageState(1);
+          }}
+          totalItems={Number(totalDocs)}
+          tableData={funcionarios}
+          tableTitle="Relatório de Funcionários"
+          tableColumns={[
+            { key: "nome_usuario", label: "Nome do Funcionário" },
+            { key: "matricula", label: "Matrícula" },
+            { key: "email", label: "Email" },
+            { key: "perfil", label: "Perfil" },
+            { key: "telefone", label: "Telefone" },
+            {
+              key: "ativo",
+              label: "Status",
+              format: (value) => (value ? "Ativo" : "Inativo"),
+            },
+            {
+              key: "data_cadastro",
+              label: "Data de cadastro",
+              format: (value) => (value ? AdjustDate(value) : "-"),
+            },
+            {
+              key: "data_ultima_atualizacao",
+              label: "Data de última atualização",
+              format: (value) => (value ? AdjustDate(value) : "-"),
+            },
+          ]}
+        />
 
+        <div className="flex justify-center lg:justify-end">
           <CustomPagination
             totalPages={totalPages}
             currentPage={currentPage ?? 1}
