@@ -63,7 +63,7 @@ export function CadastroProduto({
   const { data: fornecedores, isLoading: isLoadingFornecedores } = useQuery({
     queryKey: ["listaFornecedores"],
     queryFn: async () => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
       const result = await fetchData<{
@@ -74,10 +74,10 @@ export function CadastroProduto({
           page: number;
           limit: number;
         };
-      }>("/fornecedores?status=true", "GET", session.user.accesstoken);
+      }>("/fornecedores?status=true", "GET", session.user.accessToken);
       return result?.data?.docs || [];
     },
-    enabled: !!session?.user?.accesstoken,
+    enabled: !!session?.user?.accessToken,
   });
 
   const form = useForm<FormData>({
@@ -97,14 +97,14 @@ export function CadastroProduto({
   const queryClient = useQueryClient();
   const { mutate: createProduto, isPending } = useMutation({
     mutationFn: async (produto: FormData) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
       return await fetchData<any>(
         "/produtos",
         "POST",
-        session.user.accesstoken,
+        session.user.accessToken,
         produto
       );
     },

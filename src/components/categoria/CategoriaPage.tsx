@@ -45,7 +45,7 @@ export function CategoriaPage({
     async function loadData() {
       if (
         session.status !== "authenticated" ||
-        !session.data?.user?.accesstoken
+        !session.data?.user?.accessToken
       ) {
         return;
       }
@@ -56,7 +56,7 @@ export function CategoriaPage({
         const produtosResponse = await fetchData<CategoriaAResponse>(
           `/dashboard/categorias/categoria-${categoria.toLowerCase()}`,
           "GET",
-          session.data.user.accesstoken
+          session.data.user.accessToken
         );
 
         if (produtosResponse.error) {
@@ -108,7 +108,7 @@ export function CategoriaPage({
         const movimentacoesResponse = await fetchData<MovimentacoesResponse>(
           "/movimentacoes?limit=5000",
           "GET",
-          session.data.user.accesstoken
+          session.data.user.accessToken
         );
 
         if (!movimentacoesResponse.error && movimentacoesResponse.data) {

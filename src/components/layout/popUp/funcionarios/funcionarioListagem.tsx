@@ -109,14 +109,14 @@ export function FuncionarioListagem({
 
   const desativarMutation = useMutation({
     mutationFn: async (id: string) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
       const result = await fetchData(
         `/usuarios/desativar/${funcionario?.matricula}`,
         "PATCH",
-        session?.user?.accesstoken
+        session?.user?.accessToken
       );
       return result;
     },

@@ -66,14 +66,14 @@ export default function FornecedoresPage() {
       limite,
       nomeFornecedorFilter,
       ativoFilter,
-      session?.user?.accesstoken,
+      session?.user?.accessToken,
     ],
     queryFn: async () => {
       if (process.env.NEXT_PUBLIC_SIMULAR_ERRO === "true") {
         throw new Error("Erro simulado ao carregar dados de fornecedores");
       }
 
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -93,12 +93,12 @@ export default function FornecedoresPage() {
           page: number;
           limit: number;
         };
-      }>(`/fornecedores?${params.toString()}`, "GET", session.user.accesstoken);
+      }>(`/fornecedores?${params.toString()}`, "GET", session.user.accessToken);
 
       return result.data || [];
     },
     retry: false,
-    enabled: status === "authenticated" && !!session?.user?.accesstoken,
+    enabled: status === "authenticated" && !!session?.user?.accessToken,
   });
 
   useEffect(() => {

@@ -29,12 +29,12 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const carregarFotoPerfil = async () => {
-    if (!matricula || !usuario?.accesstoken) return;
+    if (!matricula || !usuario?.accessToken) return;
 
     try {
       const response = await fetch(`${API_URL}/usuarios/${matricula}`, {
         headers: {
-          Authorization: `Bearer ${usuario.accesstoken}`,
+          Authorization: `Bearer ${usuario.accessToken}`,
         },
       });
 
@@ -64,12 +64,12 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
   };
 
   const carregarDadosUsuario = async () => {
-    if (!matricula || !usuario?.accesstoken) return;
+    if (!matricula || !usuario?.accessToken) return;
 
     try {
       const response = await fetch(`${API_URL}/usuarios/${matricula}`, {
         headers: {
-          Authorization: `Bearer ${usuario.accesstoken}`,
+          Authorization: `Bearer ${usuario.accessToken}`,
         },
       });
 
@@ -118,7 +118,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
       carregarFotoPerfil();
       carregarDadosUsuario();
     }
-  }, [matricula, usuario?.accesstoken]);
+  }, [matricula, usuario?.accessToken]);
 
   return (
     <UserProfileContext.Provider value={{ 

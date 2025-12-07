@@ -95,14 +95,14 @@ export default function MovimentacoesPage() {
       tipoProdutoFilter,
       dataInicialFilter,
       dataFinalFilter,
-      session?.user?.accesstoken,
+      session?.user?.accessToken,
     ],
     queryFn: async () => {
       if (process.env.NEXT_PUBLIC_SIMULAR_ERRO === "true") {
         throw new Error("Erro simulado ao carregar os dados de movimentações");
       }
 
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -127,7 +127,7 @@ export default function MovimentacoesPage() {
       }>(
         `/movimentacoes?${params.toString()}`,
         "GET",
-        session.user.accesstoken
+        session.user.accessToken
       );
 
       if (result.data?.docs) {
@@ -155,7 +155,7 @@ export default function MovimentacoesPage() {
       return result.data || [];
     },
     retry: false,
-    enabled: status === "authenticated" && !!session?.user?.accesstoken,
+    enabled: status === "authenticated" && !!session?.user?.accessToken,
   });
 
   useEffect(() => {

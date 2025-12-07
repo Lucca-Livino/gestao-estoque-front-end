@@ -99,18 +99,18 @@ export function FornecedorEdicao({
 
   const { mutate: updateFornecedor, isPending } = useMutation({
     mutationFn: async (data: any) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
-      if (!session || !session.user.accesstoken) {
+      if (!session || !session.user.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
       return await fetchData<any>(
         `/fornecedores/${fornecedor?._id}`,
         "PATCH",
-        session.user.accesstoken,
+        session.user.accessToken,
         data
       );
     },
