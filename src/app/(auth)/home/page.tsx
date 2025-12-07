@@ -18,9 +18,9 @@ export default function Home() {
               <h1
                 className="text-xl font-bold text-white"
                 onClick={() => (window.location.href = "/home")}
-                data-test="titulo-gestao-estoque"
+                data-test="titulo-garagehub"
               >
-                Gestão de Estoque
+                GarageHub
               </h1>
               <UserMenu />
             </div>

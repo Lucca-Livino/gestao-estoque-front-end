@@ -3,21 +3,21 @@ describe("Home Page", () => {
     // Faz login antes de cada teste
     cy.clearCookies();
     cy.clearLocalStorage();
-    cy.visit("http://localhost:3000/login");
+    cy.visit("https://garagehub.app.fslab.dev/login");
     
     cy.getByData("matricula").type("ADM0001");
     cy.getByData("senha").type("Admin@123");
     cy.getByData("login-button").click();
     
     cy.url().should("include", "/home", { timeout: 10000 });
-    cy.getByData("titulo-gestao-estoque").should("be.visible");
+    cy.getByData("titulo-garagehub").should("be.visible");
   });
 
   describe("Elementos da Página", () => {
     it("Deve exibir o título da página", () => {
-      cy.getByData("titulo-gestao-estoque")
+      cy.getByData("titulo-garagehub")
         .should("be.visible")
-        .and("contain", "Gestão de Estoque");
+        .and("contain", "GarageHub");
     });
 
     it("Deve exibir o container de cards de estatísticas", () => {
@@ -83,7 +83,7 @@ describe("Home Page", () => {
 
   describe("Navegação", () => {
     it("Deve recarregar a página ao clicar no título", () => {
-      cy.getByData("titulo-gestao-estoque").click();
+      cy.getByData("titulo-garagehub").click();
       cy.url().should("include", "/home");
       cy.getByData("stats-cards-container").should("be.visible");
     });
@@ -94,7 +94,7 @@ describe("Home Page", () => {
       
       cy.go("back");
       cy.url().should("include", "/home");
-      cy.getByData("titulo-gestao-estoque").should("be.visible");
+      cy.getByData("titulo-garagehub").should("be.visible");
     });
   });
 });
