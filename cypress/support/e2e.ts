@@ -15,3 +15,14 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+// Previne que erros não capturados falhem os testes
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // Retorna false para evitar que o Cypress falhe o teste
+  // em erros específicos do Cypress runner
+  if (err.message.includes('reading \'document\'')) {
+    return false;
+  }
+  // Permite que outros erros falhem o teste
+  return true;
+});

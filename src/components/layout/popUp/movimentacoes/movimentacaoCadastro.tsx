@@ -125,7 +125,7 @@ export function CadastroMovimentacao({
   const queryClient = useQueryClient();
   const { mutate: createMovimentacao, isPending } = useMutation({
     mutationFn: async (movimentacao: MovimentacaoCreateInput) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -147,7 +147,7 @@ export function CadastroMovimentacao({
       return await fetchData<any>(
         "/movimentacoes",
         "POST",
-        session.user.accesstoken,
+        session.user.accessToken,
         body
       );
     },
@@ -222,7 +222,7 @@ export function CadastroMovimentacao({
       return;
     }
 
-    if (!session?.user?.accesstoken) {
+    if (!session?.user?.accessToken) {
       setErrors((prev) => ({
         ...prev,
         [`produto_${index}_codigo`]: "Usuário não autenticado",
@@ -235,7 +235,7 @@ export function CadastroMovimentacao({
       const response = await fetchData<any>(
         `/produtos?codigo_produto=${codigo}`,
         "GET",
-        session.user.accesstoken
+        session.user.accessToken
       );
 
       console.log("Resposta da busca:", response);
@@ -280,7 +280,7 @@ export function CadastroMovimentacao({
       return;
     }
 
-    if (!session?.user?.accesstoken) {
+    if (!session?.user?.accessToken) {
       return;
     }
 
@@ -288,7 +288,7 @@ export function CadastroMovimentacao({
       const response = await fetchData<any>(
         `/produtos?produto=${encodeURIComponent(query)}`,
         "GET",
-        session.user.accesstoken
+        session.user.accessToken
       );
 
       if (response && response.data && response.data.docs) {

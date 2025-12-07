@@ -76,14 +76,14 @@ export default function ProdutosPage() {
       produtoFilter,
       categoriaFilter,
       estoqueBaixoFilter,
-      session?.user?.accesstoken,
+      session?.user?.accessToken,
     ],
     queryFn: async () => {
       if (process.env.NEXT_PUBLIC_SIMULAR_ERRO === "true") {
         throw new Error("Erro simulado ao carregar dados de produtos");
       }
 
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -103,12 +103,12 @@ export default function ProdutosPage() {
           page: number;
           limit: number;
         };
-      }>(`/produtos?${params.toString()}`, "GET", session.user.accesstoken);
+      }>(`/produtos?${params.toString()}`, "GET", session.user.accessToken);
 
       return result.data || [];
     },
     retry: false,
-    enabled: status === "authenticated" && !!session?.user?.accesstoken,
+    enabled: status === "authenticated" && !!session?.user?.accessToken,
   });
 
   useEffect(() => {

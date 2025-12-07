@@ -9,8 +9,8 @@ declare module "next-auth" {
 			email: string;
 			matricula: string;
 			perfil: string;
-			accesstoken: string;
-			refreshtoken: string;
+			accessToken: string;
+			refreshToken: string;
 			telefone?: string;
 		};
 	}
@@ -21,8 +21,8 @@ declare module "next-auth" {
 		email: string;
 		matricula: string;
 		perfil: string;
-		accesstoken: string;
-		refreshtoken: string;
+		accessToken: string;
+		refreshToken: string;
 		telefone?: string;
 	}
 
@@ -35,8 +35,8 @@ declare module "next-auth/jwt" {
 		email: string;
 		matricula: string;
 		perfil: string;
-		accesstoken: string;
-		refreshtoken: string;
+		accessToken: string;
+		refreshToken: string;
 		telefone?: string;
 		accessTokenExpires?: number;
 		error?: string;

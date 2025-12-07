@@ -20,7 +20,7 @@ export default function DashboardNavigation() {
   useEffect(() => {
     const calcularTotalSaidas = async () => {
       try {
-        const token = session?.user?.accesstoken;
+        const token = session?.user?.accessToken;
         if (!token) return;
 
         const response = await fetchData<{ 
@@ -57,7 +57,7 @@ export default function DashboardNavigation() {
       }
     };
 
-    if (session?.user?.accesstoken) {
+    if (session?.user?.accessToken) {
       calcularTotalSaidas();
     }
   }, [session]);

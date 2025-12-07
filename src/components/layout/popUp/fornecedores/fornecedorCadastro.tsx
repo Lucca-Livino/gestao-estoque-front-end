@@ -119,7 +119,7 @@ export default function FornecedorCadastro({
   const queryClient = useQueryClient();
   const { mutate: createFornecedor, isPending } = useMutation({
     mutationFn: async (payload: FornecedorInput) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -143,7 +143,7 @@ export default function FornecedorCadastro({
       return await fetchData<any>(
         "/fornecedores",
         "POST",
-        session.user.accesstoken,
+        session.user.accessToken,
         body
       );
     },

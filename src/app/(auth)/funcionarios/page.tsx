@@ -73,14 +73,14 @@ export default function FuncionariosPage() {
       usuarioFilter,
       perfilFilter,
       statusFilter,
-      session?.user?.accesstoken,
+      session?.user?.accessToken,
     ],
     queryFn: async () => {
       if (process.env.NEXT_PUBLIC_SIMULAR_ERRO === "true") {
         throw new Error("Erro simulado ao carregar os dados de funcionários");
       }
 
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -101,7 +101,7 @@ export default function FuncionariosPage() {
           page: number;
           limit: number;
         };
-      }>(`/usuarios?${params.toString()}`, "GET", session.user.accesstoken);
+      }>(`/usuarios?${params.toString()}`, "GET", session.user.accessToken);
 
       if (result.data?.docs) {
         result.data.docs = result.data.docs.map((funcionario) => ({
@@ -116,7 +116,7 @@ export default function FuncionariosPage() {
       return result.data || [];
     },
     retry: false,
-    enabled: sessionStatus === "authenticated" && !!session?.user?.accesstoken,
+    enabled: sessionStatus === "authenticated" && !!session?.user?.accessToken,
   });
 
   useEffect(() => {

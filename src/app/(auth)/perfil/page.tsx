@@ -81,7 +81,7 @@ export default function PerfilPage() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${usuario?.accesstoken}`,
+          Authorization: `Bearer ${usuario?.accessToken}`,
         },
         body: JSON.stringify({
           nome_usuario: formData.nome_usuario,
@@ -144,7 +144,7 @@ export default function PerfilPage() {
       const response = await fetch(`${API_URL}/usuarios/${matricula}/foto-perfil`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${usuario?.accesstoken}`,
+          Authorization: `Bearer ${usuario?.accessToken}`,
         },
         body: formData,
       });

@@ -11,7 +11,7 @@ async function refreshAccessToken(token: JWT) {
     const res = await fetch(`${process.env.API_URL_SERVER_SIDED}/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refreshToken: token.refreshtoken }),
+      body: JSON.stringify({ refreshToken: token.refreshToken }),
     });
 
     if (!res.ok) {
@@ -24,8 +24,8 @@ async function refreshAccessToken(token: JWT) {
 
     return {
       ...token,
-      accesstoken: data.accesstoken,
-      refreshtoken: data.refreshtoken ?? token.refreshtoken,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken ?? token.refreshToken,
       accessTokenExpires: Date.now() + 60 * 60 * 1000, // ✅ 1 hora
     };
   } catch (err) {
@@ -69,8 +69,8 @@ export const authOptions: NextAuthOptions = {
             matricula: json.usuario.matricula ?? "",
             perfil: json.usuario.perfil ?? "",
             telefone: json.usuario.telefone ?? "",
-            accesstoken: json.accessToken ?? "",
-            refreshtoken: json.refreshToken ?? "",
+            accessToken: json.accessToken ?? "",
+            refreshToken: json.refreshToken ?? "",
             manterLogado: credentials.manterLogado === "true",
           };
         }
@@ -96,8 +96,8 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      // Se não tem refreshtoken, não tenta renovar (usuário não autenticado)
-      if (!token.refreshtoken) {
+      // Se não tem refreshToken, não tenta renovar (usuário não autenticado)
+      if (!token.refreshToken) {
         return token;
       }
 

@@ -33,6 +33,7 @@ export default function StatCard({ card }: StatCardProps) {
     <div 
       onClick={handleClick}
       className="bg-white rounded-xl p-8 text-blue-900 min-h-[120px] flex items-center cursor-pointer hover:shadow-[0_0_25px_rgba(0,0,0,0.15)] transition-all duration-200 transform hover:scale-105 shadow-[0_0_15px_rgba(0,0,0,0.1)]"
+      data-test={`stat-card-${id}`}
     >
       <div className="flex items-center space-x-4 w-full">
         <Icon className="w-12 h-12" />

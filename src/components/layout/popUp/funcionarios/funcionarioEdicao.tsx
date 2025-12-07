@@ -73,7 +73,7 @@ export function FuncionarioEdicao({
   const queryClient = useQueryClient();
   const { mutate: updateFuncionario, isPending } = useMutation({
     mutationFn: async (data: FormDataEdicao) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
@@ -84,7 +84,7 @@ export function FuncionarioEdicao({
       return await fetchData<any>(
         `/usuarios/${funcionario.matricula}`,
         "PATCH",
-        session.user.accesstoken,
+        session.user.accessToken,
         data
       );
     },

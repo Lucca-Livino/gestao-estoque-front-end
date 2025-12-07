@@ -72,14 +72,14 @@ export function CadastroFuncionario({
   const queryClient = useQueryClient();
   const { mutate: createFuncionario, isPending } = useMutation({
     mutationFn: async (funcionario: FormData) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
       return await fetchData<any>(
         "/usuarios",
         "POST",
-        session.user.accesstoken,
+        session.user.accessToken,
         funcionario
       );
     },

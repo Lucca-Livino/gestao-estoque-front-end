@@ -119,14 +119,14 @@ export function FornecedorListagem({
 
   const desativarMutation = useMutation({
     mutationFn: async (id: string) => {
-      if (!session?.user?.accesstoken) {
+      if (!session?.user?.accessToken) {
         throw new Error("Usuário não autenticado");
       }
 
       const result = await fetchData(
         `/fornecedores/${id}`,
         "PATCH",
-        session?.user?.accesstoken,
+        session?.user?.accessToken,
         {
           status: false,
         }
