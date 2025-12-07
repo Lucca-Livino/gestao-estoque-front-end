@@ -30,4 +30,9 @@ describe("Login Page", () => {
     cy.getByData("manter-logado").check();
     cy.getByData("manter-logado").should("be.checked");
   });
+
+  it("Deve redirecionar para página de recuperar senha ao clicar em 'clique aqui'", () => {
+    cy.get('a').contains('Clique aqui').should("be.visible").click();
+    cy.url().should("include", "/recuperar-senha");
+  });
 });
