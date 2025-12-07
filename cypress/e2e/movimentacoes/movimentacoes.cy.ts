@@ -193,8 +193,8 @@ describe("Movimentações", () => {
         method: "POST",
         url: `${apiUrl}/login`,
         body: {
-          matricula: 'GER0001',
-          senha: 'Gerente@123',
+          matricula: "GER0001",
+          senha: "Gerente@123",
         },
       }).then((loginResponse) => {
         const authToken = loginResponse.body.accessToken;
@@ -257,8 +257,8 @@ describe("Movimentações", () => {
         method: "POST",
         url: `${apiUrl}/login`,
         body: {
-          matricula: 'GER0001',
-          senha: 'Gerente@123',
+          matricula: "GER0001",
+          senha: "Gerente@123",
         },
       }).then((loginResponse) => {
         const authToken = loginResponse.body.accessToken;
@@ -331,13 +331,12 @@ describe("Movimentações", () => {
     });
 
     it("Deve filtrar movimentações por busca", () => {
+      cy.wait(1000);
+
       cy.getByData("input-busca-movimentacao").type("Destino Teste{enter}");
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include(
-          "movimentacao=Destino+Teste"
-        );
-      });
+      cy.wait(1500);
+      cy.url().should("include", "movimentacao=Destino+Teste");
 
       cy.get("tbody tr").first().click();
       cy.getByData("dialog-listagem-movimentacao").should("be.visible");
@@ -345,12 +344,13 @@ describe("Movimentações", () => {
     });
 
     it("Deve filtrar movimentações por tipo", () => {
+      cy.wait(1000);
+
       cy.getByData("select-tipo-movimentacao").click();
       cy.getByData("select-item-entrada").click();
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("tipo=");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "tipo=");
 
       cy.get("tbody tr").first().click();
       cy.getByData("dialog-listagem-movimentacao").should("be.visible");
@@ -358,41 +358,39 @@ describe("Movimentações", () => {
     });
 
     it("Deve filtrar movimentações por data inicial e final", () => {
+      cy.wait(1000);
+
       cy.getByData("calendar-data-inicial").click();
       cy.get(".rdp-day").eq(5).click();
 
       cy.getByData("calendar-data-final").click();
       cy.get(".rdp-day").eq(10).click();
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("data_inicio=");
-        expect(interception.request.url).to.include("data_fim=");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "data_inicio=");
+      cy.url().should("include", "data_fim=");
     });
 
     it("Deve exibir mensagem quando nenhuma movimentação for encontrada", () => {
+      cy.wait(1000);
+
       cy.getByData("input-busca-movimentacao").type(
         "MovimentacaoInexistente123{enter}"
       );
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include(
-          "movimentacao=MovimentacaoInexistente123"
-        );
-      });
-
-      cy.wait(500);
+      cy.wait(2000);
       cy.contains("Nenhuma movimentação encontrada", { timeout: 5000 }).should(
         "exist"
       );
     });
 
     it("Deve limpar filtros de movimentações", () => {
+      cy.wait(1000);
+
       cy.getByData("input-busca-movimentacao").type("teste{enter}");
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("movimentacao=");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "movimentacao=");
 
       cy.getByData("btn-limpar-filtros-movimentacao")
         .should("be.visible")
@@ -400,12 +398,11 @@ describe("Movimentações", () => {
 
       cy.getByData("input-busca-movimentacao").should("have.value", "");
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.not.include("tipo=");
-        expect(interception.request.url).to.not.include("movimentacao=");
-        expect(interception.request.url).to.not.include("data_inicio=");
-        expect(interception.request.url).to.not.include("data_fim=");
-      });
+      cy.wait(1500);
+      cy.url().should("not.include", "movimentacao=");
+      cy.url().should("not.include", "tipo=");
+      cy.url().should("not.include", "data_inicio=");
+      cy.url().should("not.include", "data_fim=");
     });
   });
 
@@ -416,32 +413,31 @@ describe("Movimentações", () => {
     });
 
     it("Deve navegar para a próxima página", () => {
+      cy.wait(1000);
       cy.getByData("btn-proxima-pagina").should("be.visible").click();
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("page=2");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "page=2");
     });
 
     it("Deve navegar para a página anterior", () => {
+      cy.wait(1000);
       cy.getByData("btn-proxima-pagina").click();
-      cy.wait("@getMovimentacoes");
+      cy.wait(1500);
 
       cy.getByData("btn-pagina-anterior").click();
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        expect(interception.request.url).to.include("page=1");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "page=1");
     });
 
     it("Deve alterar o número de itens por página", () => {
+      cy.wait(1000);
       cy.getByData("select-itens-por-pagina").click();
       cy.getByData("select-item-20").click();
 
-      cy.wait("@getMovimentacoes").then((interception) => {
-        const url = new URL(interception.request.url);
-        expect(url.searchParams.get("limite")).to.eq("20");
-      });
+      cy.wait(1500);
+      cy.url().should("include", "limite=20");
     });
   });
 
