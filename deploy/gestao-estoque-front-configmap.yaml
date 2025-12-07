@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gestao-estoque-front-env
+data:
+  NEXTAUTH_SECRET: "sua-chave-secreta-super-segura-2024"
+  NEXT_PUBLIC_API_URL: "https://gestao-estoque-api.app.fslab.dev"
+  API_URL_SERVER_SIDED: "http://gestao-estoque-api:80"
+  NEXT_PUBLIC_SIMULAR_ERRO: "false"
+  NODE_ENV: "production"
+  NEXTAUTH_URL: "https://garagehub.app.fslab.dev"
+  AUTH_TRUST_HOST: "true"

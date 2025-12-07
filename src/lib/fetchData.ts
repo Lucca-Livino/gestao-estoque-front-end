@@ -20,7 +20,7 @@ export async function fetchData<T>(
   // Se não receber token, tenta pegar da sessão NextAuth
   if (!token && typeof window !== "undefined") {
     const session = await getSession();
-    token = session?.user?.accesstoken ?? null;
+    token = session?.user?.accessToken ?? null;
   }
 
   const headers: HeadersInit = {

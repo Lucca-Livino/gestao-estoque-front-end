@@ -13,7 +13,11 @@ spec:
     spec:
       containers:
       - name: gestao-estoque-front
-        image: luccalivino/gestao-estoque:latest
+        image: luccalivino/gestao-estoque-front:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: gestao-estoque-front-env
         resources: {}
         ports:
         - containerPort: 3000
@@ -21,7 +25,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: estoque
+  name: garagehub
 spec:
   selector:
     app: gestao-estoque-front
