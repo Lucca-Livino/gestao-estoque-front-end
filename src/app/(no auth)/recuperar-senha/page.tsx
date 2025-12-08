@@ -51,7 +51,7 @@ export default function RecuperarSenhaPage() {
 
       <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 relative z-10">
 
-        <div className="flex items-center space-x-3">
+        <div className="flex justify-start">
           <h1 className="text-xl font-bold">GarageHub</h1>
         </div>
 
@@ -68,7 +68,7 @@ export default function RecuperarSenhaPage() {
               </p>
              
               {success && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3" data-test="mensagem-sucesso">
                   <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <h3 className="font-medium text-green-800 mb-1">Email enviado!</h3>
@@ -80,7 +80,7 @@ export default function RecuperarSenhaPage() {
               )}
              
               {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3" data-test="mensagem-erro">
                   <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                   <p className="text-sm text-red-700">{error}</p>
                 </div>
@@ -101,6 +101,7 @@ export default function RecuperarSenhaPage() {
                       placeholder="seu@email.com"
                       required
                       disabled={loading}
+                      data-test="email-recuperacao"
                     />
                   </div>
 
@@ -108,6 +109,7 @@ export default function RecuperarSenhaPage() {
                     type="submit"
                     disabled={loading}
                     className="w-full bg-[#0042D9] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#0042D9]/90 focus:ring-2 focus:ring-[#0042D9] focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                    data-test="btn-enviar-recuperacao"
                   >
                     {loading ? 'Enviando...' : 'Enviar link de recuperação'}
                   </button>
@@ -119,6 +121,7 @@ export default function RecuperarSenhaPage() {
                   <button
                     onClick={() => router.push('/login')}
                     className="w-full bg-[#0042D9] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#0042D9]/90 transition-all shadow-lg"
+                    data-test="btn-ir-para-login"
                   >
                     Ir para o Login
                   </button>
@@ -128,6 +131,7 @@ export default function RecuperarSenhaPage() {
                       setError('');
                     }}
                     className="w-full bg-white text-[#0042D9] py-3 px-4 rounded-xl font-medium border-2 border-[#0042D9] hover:bg-blue-50 transition-all"
+                    data-test="btn-enviar-outro-email"
                   >
                     Enviar para outro email
                   </button>
@@ -138,6 +142,7 @@ export default function RecuperarSenhaPage() {
                 <Link
                   href="/login"
                   className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-[#0042D9] transition-colors"
+                  data-test="link-voltar-login"
                 >
                   <ArrowLeft size={16} />
                   Voltar para o login
