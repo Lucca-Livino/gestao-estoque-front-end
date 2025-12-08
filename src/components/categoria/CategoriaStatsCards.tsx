@@ -19,13 +19,13 @@ export function CategoriaStatsCards({
   corSaida = "#97BDF2"
 }: CategoriaStatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <Card>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" data-test="stats-cards">
+      <Card data-test="card-total-produtos">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500 mb-1">Produtos na categoria</p>
-              <p className="text-2xl font-bold text-gray-900">{totalProdutos}</p>
+              <p className="text-2xl font-bold text-gray-900" data-test="valor-total-produtos">{totalProdutos}</p>
             </div>
             <div className="p-3 bg-gray-100 rounded-full">
               <Package className="w-6 h-6 text-gray-600" />
@@ -34,12 +34,12 @@ export function CategoriaStatsCards({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card data-test="card-total-entradas">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500 mb-1">Unidades recebidas</p>
-              <p className="text-2xl font-bold" style={{ color: corEntrada }}>{totalEntradas}</p>
+              <p className="text-2xl font-bold" style={{ color: corEntrada }} data-test="valor-total-entradas">{totalEntradas}</p>
             </div>
             <div className="p-3 rounded-full" style={{ backgroundColor: `${corEntrada}15` }}>
               <TrendingUp className="w-6 h-6" style={{ color: corEntrada }} />
@@ -48,12 +48,12 @@ export function CategoriaStatsCards({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card data-test="card-total-saidas">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500 mb-1">Unidades expedidas</p>
-              <p className="text-2xl font-bold" style={{ color: corSaida }}>{totalSaidas}</p>
+              <p className="text-2xl font-bold" style={{ color: corSaida }} data-test="valor-total-saidas">{totalSaidas}</p>
             </div>
             <div className="p-3 rounded-full" style={{ backgroundColor: `${corSaida}25` }}>
               <TrendingDown className="w-6 h-6" style={{ color: corSaida }} />
