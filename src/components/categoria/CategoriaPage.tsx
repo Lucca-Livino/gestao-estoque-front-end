@@ -252,13 +252,14 @@ export function CategoriaPage({
               size="icon"
               onClick={() => router.push("/home")}
               className="shrink-0"
+              data-test="btn-voltar"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-3xl font-bold text-gray-900">{titulo}</h1>
+            <h1 className="text-3xl font-bold text-gray-900" data-test="titulo-categoria">{titulo}</h1>
           </div>
 
-          <div className="mb-8">
+          <div className="mb-8" data-test="secao-stats">
             <CategoriaStatsCards
               totalProdutos={totalProdutos}
               totalEntradas={totalEntradas}
@@ -279,8 +280,8 @@ export function CategoriaPage({
             />
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-6" data-test="secao-lista-produtos">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6" data-test="titulo-lista-produtos">
               Lista de Produtos
             </h2>
             <TabelaCategoriaProdutos produtos={produtosFormatados} />

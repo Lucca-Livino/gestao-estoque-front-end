@@ -34,12 +34,12 @@ export function CategoriaChart({
   } satisfies ChartConfig
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-6" data-test="chart-movimentacoes">
       <CardHeader>
-        <CardTitle>{titulo}</CardTitle>
-        <CardDescription>{descricao}</CardDescription>
+        <CardTitle data-test="titulo-chart">{titulo}</CardTitle>
+        <CardDescription data-test="descricao-chart">{descricao}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent data-test="conteudo-chart">
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
